@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.mac2work.forumrestapi.model.Book;
+import com.mac2work.forumrestapi.model.Thread;
 import com.mac2work.forumrestapi.service.BookService;
 
 import lombok.RequiredArgsConstructor;
@@ -32,9 +33,9 @@ public class BookController {
 	}
 	
 	@GetMapping("/{id}/threads")
-	public ResponseEntity<List<Thread>> getSpecificBookThreads(){
+	public ResponseEntity<List<Thread>> getSpecificBookThreads(@PathVariable Integer id){
 		
-		return null;
+		return ResponseEntity.ok(bookService.getSpecificBookThreads(id));
 	}
 	
 	}
