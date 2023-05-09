@@ -31,7 +31,7 @@ public class Book {
 	private Integer publicationYear;
 	private String description;
 	
-	@OneToMany(mappedBy = "thread", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@OneToMany(mappedBy = "book", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	private List<Thread> threads;
 
 

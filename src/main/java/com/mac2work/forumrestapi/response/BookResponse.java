@@ -10,7 +10,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class BookResponse {
-
+	
+	private Integer id;
 	private String name;
 	private Integer publication_year;
 	private String description;

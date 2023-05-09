@@ -5,11 +5,15 @@ import java.util.List;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.mac2work.forumrestapi.model.Book;
 import com.mac2work.forumrestapi.model.Thread;
+import com.mac2work.forumrestapi.request.BookRequest;
+import com.mac2work.forumrestapi.response.BookResponse;
 import com.mac2work.forumrestapi.service.BookService;
 
 import lombok.RequiredArgsConstructor;
@@ -38,4 +42,10 @@ public class BookController {
 		return ResponseEntity.ok(bookService.getSpecificBookThreads(id));
 	}
 	
+	@PostMapping
+	public ResponseEntity<BookResponse> addBook(@RequestBody BookRequest bookRequest){
+	
+		return ResponseEntity.ok(bookService.addBook(bookRequest));
+	
 	}
+}
