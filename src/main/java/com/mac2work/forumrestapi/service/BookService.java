@@ -47,4 +47,18 @@ public class BookService {
 				.build();
 	}
 
+	public BookResponse updateBook(Integer id, BookRequest bookRequest) {
+
+		bookRepository.updateById(id, bookRequest);
+		
+		Book book = bookRepository.findById(id).orElseThrow();
+		
+		return BookResponse.builder()
+				.id(book.getId())
+				.name(book.getName())
+				.publication_year(book.getPublicationYear())
+				.description(book.getDescription())
+				.build();
+	}
+
 }
