@@ -49,9 +49,15 @@ public class BookService {
 
 	public BookResponse updateBook(Integer id, BookRequest bookRequest) {
 
-		bookRepository.updateById(id, bookRequest);
+		Book book = Book.builder()
+				.name(bookRequest.getName())
+				.publicationYear(bookRequest.getPublicationYear())
+				.description(bookRequest.getDescription())
+				.build();
 		
-		Book book = bookRepository.findById(id).orElseThrow();
+		bookRepository.updateById(id, book);
+		
+		Book updatedBook = bookRepository.findById(id).orElseThrow();
 		
 		return BookResponse.builder()
 				.id(book.getId())
