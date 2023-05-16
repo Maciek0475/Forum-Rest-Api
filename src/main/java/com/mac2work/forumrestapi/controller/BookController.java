@@ -56,6 +56,6 @@ public class BookController {
 		return ResponseEntity.ok(bookResponse);
 	}
 	
-//	@DeleteMapping("/{id}")
-//	public 
+	@DeleteMapping("/{id}")
+	public 
 }
