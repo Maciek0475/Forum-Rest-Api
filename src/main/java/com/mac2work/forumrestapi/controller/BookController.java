@@ -3,6 +3,7 @@ package com.mac2work.forumrestapi.controller;
 import java.util.List;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.mac2work.forumrestapi.model.Book;
 import com.mac2work.forumrestapi.model.Thread;
 import com.mac2work.forumrestapi.request.BookRequest;
+import com.mac2work.forumrestapi.response.ApiResponse;
 import com.mac2work.forumrestapi.response.BookResponse;
 import com.mac2work.forumrestapi.service.BookService;
 
@@ -57,5 +59,9 @@ public class BookController {
 	}
 	
 	@DeleteMapping("/{id}")
-	public 
+	public ResponseEntity<ApiResponse> deleteBook(@PathVariable Integer id) {
+		ApiResponse apiResponse = bookService.deleteBook(id);
+		return ResponseEntity.ok(apiResponse);
+		
+	}
 }
