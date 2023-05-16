@@ -6,4 +6,5 @@ import com.mac2work.forumrestapi.model.Book;
 
 public interface BookRepository extends JpaRepository<Book, Integer>{
 
+
 }
