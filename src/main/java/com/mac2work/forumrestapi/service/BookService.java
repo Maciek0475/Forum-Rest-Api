@@ -50,14 +50,16 @@ public class BookService {
 	}
 
 	public BookResponse updateBook(Integer id, BookRequest bookRequest) {
-
-		Book book = Book.builder()
-				.name(bookRequest.getName())
-				.publicationYear(bookRequest.getPublicationYear())
-				.description(bookRequest.getDescription())
-				.build();
 		
-		bookRepository.updateById(id, book);
+		Book book = bookRepository.findById(id).orElseThrow();
+
+		book.setName(bookRequest.getName());
+		book.setPublicationYear(bookRequest.getPublicationYear());
+		book.setDescription(bookRequest.getDescription());
+
+		System.out.println(book);
+		
+		bookRepository.save(book);		
 		
 		Book updatedBook = bookRepository.findById(id).orElseThrow();
 		
