@@ -14,7 +14,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class ThreadResponse {
 	
-	private Integer id;
 	private String name;
 	private Book book;
 	private User user;
