@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
+import com.mac2work.forumrestapi.exception.ResourceNotFoundException;
 import com.mac2work.forumrestapi.model.Book;
 import com.mac2work.forumrestapi.model.Thread;
 import com.mac2work.forumrestapi.repository.BookRepository;
@@ -12,6 +13,7 @@ import com.mac2work.forumrestapi.request.BookRequest;
 import com.mac2work.forumrestapi.response.ApiResponse;
 import com.mac2work.forumrestapi.response.BookResponse;
 
+import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 
 @Service
@@ -25,11 +27,11 @@ public class BookService {
 	}
 
 	public Book getSpecificBook(Integer id) {
-		return bookRepository.findById(id).orElseThrow();
+		return bookRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Book", "id", id));
 	}
 
 	public List<Thread> getSpecificBookThreads(Integer id) {
-		Book book = bookRepository.findById(id).orElseThrow();
+		Book book = bookRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Book", "id", id));
 		return book.getThreads();
 	}
 
@@ -51,7 +53,7 @@ public class BookService {
 
 	public BookResponse updateBook(Integer id, BookRequest bookRequest) {
 		
-		Book book = bookRepository.findById(id).orElseThrow();
+		Book book = bookRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Book", "id", id));
 
 		book.setName(bookRequest.getName());
 		book.setPublicationYear(bookRequest.getPublicationYear());
@@ -61,7 +63,7 @@ public class BookService {
 		
 		bookRepository.save(book);		
 		
-		Book updatedBook = bookRepository.findById(id).orElseThrow();
+		Book updatedBook = bookRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Book", "id", id));
 		
 		return BookResponse.builder()
 				.id(updatedBook.getId())
