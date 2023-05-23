@@ -4,7 +4,9 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
+import com.mac2work.forumrestapi.response.MessageResponse;
 import com.mac2work.forumrestapi.exception.ResourceNotFoundException;
+import com.mac2work.forumrestapi.model.Message;
 import com.mac2work.forumrestapi.model.Thread;
 import com.mac2work.forumrestapi.repository.ThreadRepository;
 import com.mac2work.forumrestapi.response.ThreadResponse;
@@ -39,6 +41,18 @@ public class ThreadService {
 				.user(thread.getUser())
 				.content(thread.getContent())
 				.build();
+	}
+
+	public List<MessageResponse> getSpecificThreadMessages(Integer id) {
+		Thread thread = threadRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Thread", "id", id));
+		List<Message> messages = thread.getMessages();
+		
+		return messages.stream().map(
+				message -> new MessageResponse(
+						message.getThread(),
+						message.getUser(),
+						message.getContent())
+				).toList();
 	}
 
 }
