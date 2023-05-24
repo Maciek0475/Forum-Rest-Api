@@ -6,9 +6,12 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.mac2work.forumrestapi.request.ThreadRequest;
 import com.mac2work.forumrestapi.response.MessageResponse;
 import com.mac2work.forumrestapi.response.ThreadResponse;
 import com.mac2work.forumrestapi.service.ThreadService;
@@ -37,10 +40,14 @@ public class ThreadController {
 	@GetMapping("/{id}/messages")
 	public ResponseEntity<List<MessageResponse>> getSpecificThreadMessages(@PathVariable Integer id){
 		List<MessageResponse> messageResponses = threadService.getSpecificThreadMessages(id);
-		
 		return new ResponseEntity<>(messageResponses, HttpStatus.OK);
 	}
 	
+	@PostMapping
+	public ResponseEntity<ThreadResponse> addThread(@RequestBody ThreadRequest threadRequest){
+		ThreadResponse threadResponse = threadService.addThread(threadRequest);
+		return new ResponseEntity<>(threadResponse, HttpStatus.CREATED);
+	}
 	
 
 }
