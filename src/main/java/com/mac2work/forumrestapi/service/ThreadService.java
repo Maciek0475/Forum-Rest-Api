@@ -4,9 +4,16 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
+import com.mac2work.forumrestapi.response.MessageResponse;
 import com.mac2work.forumrestapi.exception.ResourceNotFoundException;
+import com.mac2work.forumrestapi.model.Book;
+import com.mac2work.forumrestapi.model.Message;
 import com.mac2work.forumrestapi.model.Thread;
+import com.mac2work.forumrestapi.model.User;
+import com.mac2work.forumrestapi.repository.BookRepository;
 import com.mac2work.forumrestapi.repository.ThreadRepository;
+import com.mac2work.forumrestapi.repository.UserRepository;
+import com.mac2work.forumrestapi.request.ThreadRequest;
 import com.mac2work.forumrestapi.response.ThreadResponse;
 
 import lombok.RequiredArgsConstructor;
@@ -16,6 +23,8 @@ import lombok.RequiredArgsConstructor;
 public class ThreadService {
 
 	private final ThreadRepository threadRepository;
+	private final BookRepository bookRepository;
+	private final UserRepository userRepository;
 	
 	public List<ThreadResponse> getThreads() {
 		List<Thread> threads = threadRepository.findAll();
@@ -38,6 +47,41 @@ public class ThreadService {
 				.book(thread.getBook())
 				.user(thread.getUser())
 				.content(thread.getContent())
+				.build();
+	}
+
+	public List<MessageResponse> getSpecificThreadMessages(Integer id) {
+		Thread thread = threadRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Thread", "id", id));
+		List<Message> messages = thread.getMessages();
+		
+		return messages.stream().map(
+				message -> new MessageResponse(
+						message.getThread(),
+						message.getUser(),
+						message.getContent())
+				).toList();
+	}
+
+	public ThreadResponse addThread(ThreadRequest threadRequest) {
+		Book book = bookRepository.findById(threadRequest.getBookId()).orElseThrow(
+				() -> new ResourceNotFoundException("Book", "id", threadRequest.getBookId()));
+		User user = userRepository.findById(threadRequest.getUserId()).orElseThrow(
+				() -> new ResourceNotFoundException("User", "id", threadRequest.getUserId()));
+		
+		Thread thread = Thread.builder()
+				.name(threadRequest.getName())
+				.book(book)
+				.user(user)
+				.content(threadRequest.getContent())
+				.build();
+		
+		threadRepository.save(thread);
+		
+		return ThreadResponse.builder()
+				.name(threadRequest.getName())
+				.book(book)
+				.user(user)
+				.content(threadRequest.getContent())
 				.build();
 	}
 
