@@ -89,10 +89,19 @@ public class ThreadService {
 		Thread thread = getThread(id);
 		Book book = getBook(threadRequest);
 		User user = getUser(threadRequest);
+		
 		thread.setName(threadRequest.getName());
 		thread.setBook(book);
-		thread
-		return null;
+		thread.setUser(user);
+		thread.setContent(threadRequest.getContent());
+		
+		threadRepository.save(thread);
+		return ThreadResponse.builder()
+				.name(threadRequest.getName())
+				.book(book)
+				.user(user)
+				.content(threadRequest.getContent())
+				.build();
 	}
 
 	private Thread getThread(Integer id) {
