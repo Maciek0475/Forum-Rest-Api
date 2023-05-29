@@ -2,6 +2,7 @@ package com.mac2work.forumrestapi.service;
 
 import java.util.List;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import com.mac2work.forumrestapi.exception.ResourceNotFoundException;
@@ -13,6 +14,7 @@ import com.mac2work.forumrestapi.repository.BookRepository;
 import com.mac2work.forumrestapi.repository.ThreadRepository;
 import com.mac2work.forumrestapi.repository.UserRepository;
 import com.mac2work.forumrestapi.request.ThreadRequest;
+import com.mac2work.forumrestapi.response.ApiResponse;
 import com.mac2work.forumrestapi.response.MessageResponse;
 import com.mac2work.forumrestapi.response.ThreadResponse;
 
@@ -103,6 +105,17 @@ public class ThreadService {
 				.content(threadRequest.getContent())
 				.build();
 	}
+	
+	public ApiResponse deleteThread(Integer id) {
+		
+		threadRepository.delete(getThread(id));
+		
+		return ApiResponse.builder()
+				.isSuccess(Boolean.TRUE)
+				.responseMessage("Thread deleted successfully")
+				.httpStatus(HttpStatus.NO_CONTENT)
+				.build();
+	}
 
 	private Thread getThread(Integer id) {
 		Thread thread = threadRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Thread", "id", id));
@@ -120,5 +133,7 @@ public class ThreadService {
 				() -> new ResourceNotFoundException("User", "id", threadRequest.getUserId()));
 		return user;
 	}
+
+
 
 }
