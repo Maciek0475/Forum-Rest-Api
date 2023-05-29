@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.mac2work.forumrestapi.request.ThreadRequest;
+import com.mac2work.forumrestapi.response.ApiResponse;
 import com.mac2work.forumrestapi.response.MessageResponse;
 import com.mac2work.forumrestapi.response.ThreadResponse;
 import com.mac2work.forumrestapi.service.ThreadService;
@@ -54,6 +56,12 @@ public class ThreadController {
 	public ResponseEntity<ThreadResponse> updateThread(@RequestBody ThreadRequest threadRequest, @PathVariable Integer id){
 		ThreadResponse threadResponse = threadService.updateThread(id, threadRequest);
 		return new ResponseEntity<>(threadResponse, HttpStatus.OK);
+	}
+	
+	@DeleteMapping("/{id}")
+	public ResponseEntity<ApiResponse> deleteThread(@PathVariable Integer id){
+		ApiResponse apiResponse = threadService.deleteThread(id);
+		return new ResponseEntity<>(apiResponse, apiResponse.getHttpStatus());
 	}
 
 }
