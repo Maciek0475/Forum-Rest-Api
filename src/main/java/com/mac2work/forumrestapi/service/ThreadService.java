@@ -51,17 +51,17 @@ public class ThreadService {
 				.build();
 	}
 
-	public List<MessageResponse> getSpecificThreadMessages(Integer id) {
-		Thread thread = getThread(id);
-		List<Message> messages = thread.getMessages();
-		
-		return messages.stream().map(
-				message -> new MessageResponse(
-						message.getThread(),
-						message.getUser(),
-						message.getContent())
-				).toList();
-	}
+//	public List<MessageResponse> getSpecificThreadMessages(Integer id) {
+//		Thread thread = getThread(id);
+//		List<Message> messages = thread.getMessages();
+//		
+//		return messages.stream().map(
+//				message -> new MessageResponse(
+//						message.getThread(),
+//						message.getUser(),
+//						message.getContent())
+//				).toList();
+//	}
 
 	public ThreadResponse addThread(ThreadRequest threadRequest) {
 		Book book = getBook(threadRequest);
@@ -117,7 +117,7 @@ public class ThreadService {
 				.build();
 	}
 
-	private Thread getThread(Integer id) {
+	public Thread getThread(Integer id) {
 		Thread thread = threadRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Thread", "id", id));
 		return thread;
 	}

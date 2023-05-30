@@ -26,6 +26,7 @@ import lombok.NoArgsConstructor;
 @Entity(name="users")
 public class User implements UserDetails{
 
+	private static final long serialVersionUID = -472217416405246151L;
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO, generator = "native")
 	@GenericGenerator(name = "native", strategy = "native")

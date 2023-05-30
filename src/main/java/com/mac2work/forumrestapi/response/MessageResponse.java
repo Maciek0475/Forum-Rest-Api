@@ -1,6 +1,5 @@
 package com.mac2work.forumrestapi.response;
 
-import com.mac2work.forumrestapi.model.Thread;
 import com.mac2work.forumrestapi.model.User;
 
 import lombok.AllArgsConstructor;
@@ -12,7 +11,7 @@ import lombok.Data;
 @AllArgsConstructor
 public class MessageResponse {
 
-	private Thread thread;
-	private User user;
+	private String threadName;
+	private String userName;
 	private String content;
 }

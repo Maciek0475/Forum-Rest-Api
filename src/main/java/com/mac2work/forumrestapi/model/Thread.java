@@ -40,7 +40,7 @@ public class Thread {
 	private User user;
 	private String content;
 	
-	@OneToMany(mappedBy = "book", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@OneToMany(mappedBy = "thread", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	private List<Message> messages;
 	
 
