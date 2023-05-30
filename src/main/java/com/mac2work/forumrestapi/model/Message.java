@@ -2,17 +2,23 @@ package com.mac2work.forumrestapi.model;
 
 import org.hibernate.annotations.GenericGenerator;
 
+import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
 @Builder
+@Entity(name="messages")
+@NoArgsConstructor
+@AllArgsConstructor
 public class Message {
 
 	@Id
