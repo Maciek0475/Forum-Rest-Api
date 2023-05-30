@@ -6,7 +6,10 @@ import org.springframework.stereotype.Service;
 
 import com.mac2work.forumrestapi.exception.ResourceNotFoundException;
 import com.mac2work.forumrestapi.model.Message;
+import com.mac2work.forumrestapi.model.Thread;
+import com.mac2work.forumrestapi.model.User;
 import com.mac2work.forumrestapi.repository.MessageRepository;
+import com.mac2work.forumrestapi.request.MessageRequest;
 import com.mac2work.forumrestapi.response.MessageResponse;
 
 import lombok.RequiredArgsConstructor;
@@ -14,6 +17,9 @@ import lombok.RequiredArgsConstructor;
 @Service
 @RequiredArgsConstructor
 public class MessageService {
+	private final ThreadService threadService;
+	private final UserService userService;
+	
 	private final MessageRepository messageRepository;
 	public List<MessageResponse> getThreadMessages(Integer id) {
 		List<Message> messages = messageRepository.findAllByThreadId(id).orElseThrow(
@@ -23,6 +29,23 @@ public class MessageService {
 						message.getThread().getName(),
 						message.getUser().getFirstName(),
 						message.getContent())).toList();
+	}
+	public MessageResponse addThreadMessage(MessageRequest messageRequest, Integer id) {
+		Thread thread = threadService.getThread(id);
+		User loggedInUser = userService.getLoggedInUser();
+		String content = messageRequest.getContent();
+		messageRepository.save(
+				Message.builder()
+				.thread(thread)
+				.user(loggedInUser)
+				.content(content)
+				.build());
+		
+		return MessageResponse.builder()
+				.threadName(thread.getName())
+				.userName(loggedInUser.getFirstName())
+				.content(content)
+				.build();
 	}
 
 }
