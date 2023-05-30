@@ -47,5 +47,25 @@ public class MessageService {
 				.content(content)
 				.build();
 	}
+	public MessageResponse updateMessage(MessageRequest messageRequest, Integer id) {
+		Message message = getMessage(id);
+		message.setContent(messageRequest.getContent());
+		messageRepository.save(message);
+		Message updatedMessage = getMessage(id);
+		Thread thread = updatedMessage.getThread();
+		User user = updatedMessage.getUser();
+		String content = updatedMessage.getContent();
+		
+		return MessageResponse.builder()
+				.threadName(thread.getName())
+				.userName(user.getFirstName())
+				.content(content)
+				.build();
+	}
+	private Message getMessage(Integer id) {
+		Message message = messageRepository.findById(id).orElseThrow(
+				() -> new ResourceNotFoundException("Message", "id", id));
+		return message;
+	}
 
 }
