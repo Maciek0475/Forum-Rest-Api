@@ -40,11 +40,11 @@ public class ThreadController {
 		return new ResponseEntity<>(threadResponse, HttpStatus.OK);
 	}
 	
-	@GetMapping("/{id}/messages")
-	public ResponseEntity<List<MessageResponse>> getSpecificThreadMessages(@PathVariable Integer id){
-		List<MessageResponse> messageResponses = threadService.getSpecificThreadMessages(id);
-		return new ResponseEntity<>(messageResponses, HttpStatus.OK);
-	}
+//	@GetMapping("/{id}/messages")
+//	public ResponseEntity<List<MessageResponse>> getSpecificThreadMessages(@PathVariable Integer id){
+//		List<MessageResponse> messageResponses = threadService.getSpecificThreadMessages(id);
+//		return new ResponseEntity<>(messageResponses, HttpStatus.OK);
+//	}
 	
 	@PostMapping
 	public ResponseEntity<ThreadResponse> addThread(@RequestBody ThreadRequest threadRequest){
