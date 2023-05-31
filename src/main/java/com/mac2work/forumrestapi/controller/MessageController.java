@@ -24,8 +24,6 @@ import lombok.RequiredArgsConstructor;
 public class MessageController {
 
 	private final MessageService messageService;
- //get/add/update/delete User messages
-	// get/add/update/delete Thread messages
 	
 	@GetMapping("threads/{id}/messages")
 	public ResponseEntity<List<MessageResponse>> getThreadMessages(@PathVariable Integer id){
@@ -38,6 +36,7 @@ public class MessageController {
 		MessageResponse messageResponse = messageService.addThreadMessage(messageRequest, id);
 		return new ResponseEntity<>(messageResponse, HttpStatus.CREATED);
 	}
+	
 	
 	@PutMapping("messages/{id}")
 	public ResponseEntity<MessageResponse> updateMessage(@RequestBody MessageRequest messageRequest, @PathVariable Integer id){
