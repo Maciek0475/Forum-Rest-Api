@@ -2,6 +2,7 @@ package com.mac2work.forumrestapi.service;
 
 import java.util.List;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import com.mac2work.forumrestapi.exception.ResourceNotFoundException;
@@ -10,6 +11,7 @@ import com.mac2work.forumrestapi.model.Thread;
 import com.mac2work.forumrestapi.model.User;
 import com.mac2work.forumrestapi.repository.MessageRepository;
 import com.mac2work.forumrestapi.request.MessageRequest;
+import com.mac2work.forumrestapi.response.ApiResponse;
 import com.mac2work.forumrestapi.response.MessageResponse;
 
 import lombok.RequiredArgsConstructor;
@@ -30,6 +32,7 @@ public class MessageService {
 						message.getUser().getFirstName(),
 						message.getContent())).toList();
 	}
+	
 	public MessageResponse addThreadMessage(MessageRequest messageRequest, Integer id) {
 		Thread thread = threadService.getThread(id);
 		User loggedInUser = userService.getLoggedInUser();
@@ -47,6 +50,7 @@ public class MessageService {
 				.content(content)
 				.build();
 	}
+	
 	public MessageResponse updateMessage(MessageRequest messageRequest, Integer id) {
 		Message message = getMessage(id);
 		message.setContent(messageRequest.getContent());
@@ -62,10 +66,22 @@ public class MessageService {
 				.content(content)
 				.build();
 	}
+	
 	private Message getMessage(Integer id) {
 		Message message = messageRepository.findById(id).orElseThrow(
 				() -> new ResourceNotFoundException("Message", "id", id));
 		return message;
+	}
+	
+	public ApiResponse deleteMessage(Integer id) {
+		getMessage(id);
+		messageRepository.deleteById(id);
+		
+		return ApiResponse.builder()
+				.isSuccess(Boolean.TRUE)
+				.responseMessage("Message with id: "+id+" deleted successfully")
+				.httpStatus(HttpStatus.NO_CONTENT)
+				.build();
 	}
 
 }
