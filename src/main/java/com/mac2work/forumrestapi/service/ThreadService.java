@@ -7,7 +7,6 @@ import org.springframework.stereotype.Service;
 
 import com.mac2work.forumrestapi.exception.ResourceNotFoundException;
 import com.mac2work.forumrestapi.model.Book;
-import com.mac2work.forumrestapi.model.Message;
 import com.mac2work.forumrestapi.model.Thread;
 import com.mac2work.forumrestapi.model.User;
 import com.mac2work.forumrestapi.repository.BookRepository;
@@ -15,7 +14,6 @@ import com.mac2work.forumrestapi.repository.ThreadRepository;
 import com.mac2work.forumrestapi.repository.UserRepository;
 import com.mac2work.forumrestapi.request.ThreadRequest;
 import com.mac2work.forumrestapi.response.ApiResponse;
-import com.mac2work.forumrestapi.response.MessageResponse;
 import com.mac2work.forumrestapi.response.ThreadResponse;
 
 import lombok.RequiredArgsConstructor;
@@ -50,18 +48,6 @@ public class ThreadService {
 				.content(thread.getContent())
 				.build();
 	}
-
-//	public List<MessageResponse> getSpecificThreadMessages(Integer id) {
-//		Thread thread = getThread(id);
-//		List<Message> messages = thread.getMessages();
-//		
-//		return messages.stream().map(
-//				message -> new MessageResponse(
-//						message.getThread(),
-//						message.getUser(),
-//						message.getContent())
-//				).toList();
-//	}
 
 	public ThreadResponse addThread(ThreadRequest threadRequest) {
 		Book book = getBook(threadRequest);
