@@ -6,12 +6,16 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.mac2work.forumrestapi.request.UserRequest;
 import com.mac2work.forumrestapi.response.UserResponse;
 import com.mac2work.forumrestapi.service.UserService;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
 @RestController
@@ -32,4 +36,12 @@ public class UserController {
 		UserResponse userResponse = userService.getSpecificUser(id);
 		return new ResponseEntity<>(userResponse, HttpStatus.OK);
 	}
+	
+	@PutMapping("/{id}")
+	public ResponseEntity<UserResponse> updateuser(@PathVariable Integer id, @Valid @RequestBody UserRequest userRequest){
+		UserResponse userResponse = userService.updateUser(id, userRequest);
+		return new ResponseEntity<>(userResponse, HttpStatus.OK);
+		}
+	
+	
 }
