@@ -10,6 +10,7 @@ import com.mac2work.forumrestapi.exception.ResourceNotFoundException;
 import com.mac2work.forumrestapi.model.User;
 import com.mac2work.forumrestapi.repository.UserRepository;
 import com.mac2work.forumrestapi.request.UserRequest;
+import com.mac2work.forumrestapi.response.ApiResponse;
 import com.mac2work.forumrestapi.response.UserResponse;
 
 import lombok.RequiredArgsConstructor;
@@ -72,6 +73,16 @@ public class UserService {
 				.lastName(updatedUser.getLastName())
 				.email(updatedUser.getEmail())
 				.role(updatedUser.getRole())
+				.build();
+	}
+
+	public ApiResponse deleteUser(Integer id) {
+		User user = getUser(id);
+		userRepository.delete(user);
+		
+		return ApiResponse.builder()
+				.isSuccess(Boolean.TRUE)
+				.responseMessage("User deleted successfully")
 				.build();
 	}
 
