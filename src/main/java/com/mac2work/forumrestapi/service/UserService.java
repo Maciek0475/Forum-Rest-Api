@@ -40,4 +40,19 @@ public class UserService {
 		return usersResponses;
 	}
 
+	public UserResponse getSpecificUser(Integer id) {
+		User user = getUser(id);
+		
+		return UserResponse.builder()
+				.firstName(user.getFirstName())
+				.lastName(user.getLastName())
+				.email(user.getEmail())
+				.role(user.getRole())
+				.build();
+	}
+
+	private User getUser(Integer id) {
+		return userRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("User", "id", id));
+	}
+
 }
