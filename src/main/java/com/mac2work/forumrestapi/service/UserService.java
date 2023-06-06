@@ -9,6 +9,8 @@ import org.springframework.stereotype.Service;
 import com.mac2work.forumrestapi.exception.ResourceNotFoundException;
 import com.mac2work.forumrestapi.model.User;
 import com.mac2work.forumrestapi.repository.UserRepository;
+import com.mac2work.forumrestapi.request.UserRequest;
+import com.mac2work.forumrestapi.response.ApiResponse;
 import com.mac2work.forumrestapi.response.UserResponse;
 
 import lombok.RequiredArgsConstructor;
@@ -38,6 +40,50 @@ public class UserService {
 						user.getRole())).toList();
 		
 		return usersResponses;
+	}
+
+	public UserResponse getSpecificUser(Integer id) {
+		User user = getUser(id);
+		
+		return UserResponse.builder()
+				.firstName(user.getFirstName())
+				.lastName(user.getLastName())
+				.email(user.getEmail())
+				.role(user.getRole())
+				.build();
+	}
+
+	private User getUser(Integer id) {
+		return userRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("User", "id", id));
+	}
+
+	public UserResponse updateUser(Integer id, UserRequest userRequest) {
+		User user = getUser(id);
+		user.setFirstName(userRequest.getFirstName());
+		user.setLastName(userRequest.getLastName());
+		user.setEmail(userRequest.getEmail());
+		user.setPassword(userRequest.getPassword());
+		user.setRole(userRequest.getRole());
+
+		userRepository.save(user);
+		User updatedUser = getUser(id);
+		
+		return UserResponse.builder()
+				.firstName(updatedUser.getFirstName())
+				.lastName(updatedUser.getLastName())
+				.email(updatedUser.getEmail())
+				.role(updatedUser.getRole())
+				.build();
+	}
+
+	public ApiResponse deleteUser(Integer id) {
+		User user = getUser(id);
+		userRepository.delete(user);
+		
+		return ApiResponse.builder()
+				.isSuccess(Boolean.TRUE)
+				.responseMessage("User deleted successfully")
+				.build();
 	}
 
 }
