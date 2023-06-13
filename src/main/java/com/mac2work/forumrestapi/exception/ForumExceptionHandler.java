@@ -15,4 +15,9 @@ public class ForumExceptionHandler extends ResponseEntityExceptionHandler{
 		return new ResponseEntity<>(apiError, apiError.getHttpStatus());
 	}
 	
+	@ExceptionHandler(NoAccessException.class)
+	public ResponseEntity<ApiError> handleNoAccess(NoAccessException exc){
+		ApiError apiError = new ApiError(HttpStatus.FORBIDDEN, exc.getMessage());
+		return new ResponseEntity<>(apiError, apiError.getHttpStatus());
+	}
 }

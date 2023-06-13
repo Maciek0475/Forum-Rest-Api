@@ -4,6 +4,8 @@ import java.util.List;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -23,11 +25,13 @@ import lombok.RequiredArgsConstructor;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/users")
+@Secured("ADMIN")
 public class UserController {
 
 	private final UserService userService;
 	
 	@GetMapping
+	@PreAuthorize("@authorizationService.isAdmin('/users')")
 	public ResponseEntity<List<UserResponse>> getUsers(){
 		List<UserResponse> users = userService.getUsers();
 		return new ResponseEntity<>(users, HttpStatus.OK);
