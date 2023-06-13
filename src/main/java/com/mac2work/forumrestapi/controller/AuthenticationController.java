@@ -11,6 +11,7 @@ import com.mac2work.forumrestapi.request.RegisterRequest;
 import com.mac2work.forumrestapi.response.AuthenticationResponse;
 import com.mac2work.forumrestapi.service.AuthenticationService;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
 @RestController
@@ -22,7 +23,7 @@ public class AuthenticationController {
 
 	@PostMapping("/register")
 	public ResponseEntity<AuthenticationResponse> register(
-			@RequestBody RegisterRequest request){
+			@Valid @RequestBody RegisterRequest request){
 		
 		
 		return ResponseEntity.ok(authenticationService.register(request));
