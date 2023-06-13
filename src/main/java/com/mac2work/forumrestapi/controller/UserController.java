@@ -25,13 +25,12 @@ import lombok.RequiredArgsConstructor;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/users")
-@Secured("ADMIN")
+@PreAuthorize("@authorizationService.isAdmin('/users')")
 public class UserController {
 
 	private final UserService userService;
 	
 	@GetMapping
-	@PreAuthorize("@authorizationService.isAdmin('/users')")
 	public ResponseEntity<List<UserResponse>> getUsers(){
 		List<UserResponse> users = userService.getUsers();
 		return new ResponseEntity<>(users, HttpStatus.OK);

@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -48,6 +49,7 @@ public class BookController {
 	}
 	
 	@PostMapping("/{id}")
+	@PreAuthorize("@authorizationService.isAdmin('/books')")
 	public ResponseEntity<BookResponse> addBook(@RequestBody BookRequest bookRequest){
 		BookResponse bookResponse = bookService.addBook(bookRequest);
 		return new ResponseEntity<>(bookResponse, HttpStatus.CREATED);
@@ -55,12 +57,14 @@ public class BookController {
 	}
 	
 	@PutMapping("/{id}")
+	@PreAuthorize("@authorizationService.isAdmin('/books')")
 	public ResponseEntity<BookResponse> updateBook(@RequestBody BookRequest bookRequest, @PathVariable Integer id){
 		BookResponse bookResponse = bookService.updateBook(id, bookRequest);
 		return new ResponseEntity<>(bookResponse, HttpStatus.OK);
 	}
 	
 	@DeleteMapping("/{id}")
+	@PreAuthorize("@authorizationService.isAdmin('books')")
 	public ResponseEntity<ApiResponse> deleteBook(@PathVariable Integer id) {
 		ApiResponse apiResponse = bookService.deleteBook(id);
 		return new ResponseEntity<>(apiResponse, apiResponse.getHttpStatus());
