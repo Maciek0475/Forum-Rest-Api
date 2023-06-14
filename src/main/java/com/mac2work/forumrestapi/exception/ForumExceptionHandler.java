@@ -20,4 +20,10 @@ public class ForumExceptionHandler extends ResponseEntityExceptionHandler{
 		ApiError apiError = new ApiError(HttpStatus.FORBIDDEN, exc.getMessage());
 		return new ResponseEntity<>(apiError, apiError.getHttpStatus());
 	}
+	
+	@ExceptionHandler(IncorrectUserException.class)
+	public ResponseEntity<ApiError> handleIncorrectUser(IncorrectUserException exc){
+		ApiError apiError = new ApiError(HttpStatus.FORBIDDEN, exc.getMessage());
+		return new ResponseEntity<>(apiError, apiError.getHttpStatus());
+	}
 }

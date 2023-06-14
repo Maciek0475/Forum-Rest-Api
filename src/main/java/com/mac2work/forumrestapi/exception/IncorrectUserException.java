@@ -1,9 +1,13 @@
 package com.mac2work.forumrestapi.exception;
 
+import lombok.Data;
+
+@Data
 public class IncorrectUserException extends RuntimeException {
 	
 	private String resource;
 	private String message;
+	
 	public IncorrectUserException(String resource) {
 		this.resource = resource;
 		formatMessage();

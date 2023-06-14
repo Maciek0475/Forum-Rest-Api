@@ -21,8 +21,10 @@ import lombok.RequiredArgsConstructor;
 public class MessageService {
 	private final ThreadService threadService;
 	private final UserService userService;
+	private final AuthorizationService authorizationService;
 	
 	private final MessageRepository messageRepository;
+	
 	public List<MessageResponse> getThreadMessages(Integer id) {
 		List<Message> messages = messageRepository.findAllByThreadId(id).orElseThrow(
 				() -> new ResourceNotFoundException("Message", "thread_id", id));
@@ -34,8 +36,8 @@ public class MessageService {
 	}
 	
 	public MessageResponse addThreadMessage(MessageRequest messageRequest, Integer id) {
-		Thread thread = threadService.getThread(id);
 		User loggedInUser = userService.getLoggedInUser();
+		Thread thread = threadService.getThread(id);
 		String content = messageRequest.getContent();
 		messageRepository.save(
 				Message.builder()
@@ -53,6 +55,7 @@ public class MessageService {
 	
 	public MessageResponse updateMessage(MessageRequest messageRequest, Integer id) {
 		Message message = getMessage(id);
+		authorizationService.isCorrectUser(message.getUser().getId(), "message");
 		message.setContent(messageRequest.getContent());
 		messageRepository.save(message);
 		Message updatedMessage = getMessage(id);
