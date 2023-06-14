@@ -14,8 +14,6 @@ public class ThreadRequest {
 	private String name;
 	@NotBlank
 	private Integer bookId;
-	@NotBlank
-	private Integer userId;
 	@Size(max = 512)
 	private String content;
 }

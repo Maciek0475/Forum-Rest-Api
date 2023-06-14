@@ -11,7 +11,6 @@ import com.mac2work.forumrestapi.model.Thread;
 import com.mac2work.forumrestapi.model.User;
 import com.mac2work.forumrestapi.repository.BookRepository;
 import com.mac2work.forumrestapi.repository.ThreadRepository;
-import com.mac2work.forumrestapi.repository.UserRepository;
 import com.mac2work.forumrestapi.request.ThreadRequest;
 import com.mac2work.forumrestapi.response.ApiResponse;
 import com.mac2work.forumrestapi.response.ThreadResponse;
@@ -24,7 +23,9 @@ public class ThreadService {
 
 	private final ThreadRepository threadRepository;
 	private final BookRepository bookRepository;
-	private final UserRepository userRepository;
+	
+	private final UserService userService;
+	private final AuthorizationService authorizationService;
 	
 	public List<ThreadResponse> getThreads() {
 		List<Thread> threads = threadRepository.findAll();
@@ -51,7 +52,7 @@ public class ThreadService {
 
 	public ThreadResponse addThread(ThreadRequest threadRequest) {
 		Book book = getBook(threadRequest);
-		User user = getUser(threadRequest);
+		User user = userService.getLoggedInUser();
 		
 		Thread thread = Thread.builder()
 				.name(threadRequest.getName())
@@ -75,24 +76,25 @@ public class ThreadService {
 
 	public ThreadResponse updateThread(Integer id, ThreadRequest threadRequest) {
 		Thread thread = getThread(id);
+		authorizationService.isCorrectUser(thread.getUser().getId(), "thread");
 		Book book = getBook(threadRequest);
-		User user = getUser(threadRequest);
 		
 		thread.setName(threadRequest.getName());
 		thread.setBook(book);
-		thread.setUser(user);
 		thread.setContent(threadRequest.getContent());
 		
 		threadRepository.save(thread);
 		return ThreadResponse.builder()
 				.name(threadRequest.getName())
 				.book(book)
-				.user(user)
+				.user(thread.getUser())
 				.content(threadRequest.getContent())
 				.build();
 	}
 	
 	public ApiResponse deleteThread(Integer id) {
+		Thread thread = getThread(id);
+		authorizationService.isCorrectUser(thread.getUser().getId(), "thread");
 		
 		threadRepository.delete(getThread(id));
 		
@@ -114,12 +116,5 @@ public class ThreadService {
 		return book;
 	}
 	
-	private User getUser(ThreadRequest threadRequest) {
-		User user = userRepository.findById(threadRequest.getUserId()).orElseThrow(
-				() -> new ResourceNotFoundException("User", "id", threadRequest.getUserId()));
-		return user;
-	}
-
-
 
 }
