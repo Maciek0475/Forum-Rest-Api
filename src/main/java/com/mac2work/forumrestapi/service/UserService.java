@@ -23,10 +23,7 @@ public class UserService {
 
 	public User getLoggedInUser() {
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-		String email = auth.getPrincipal().toString();
-		User user = userRepository.findByEmail(email)
-				.orElseThrow(() -> new ResourceNotFoundException("User", "email", email));
-		return user;
+		return (User) auth.getPrincipal();
 	}
 
 	public List<UserResponse> getUsers() {
