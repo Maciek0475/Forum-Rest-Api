@@ -77,7 +77,8 @@ public class MessageService {
 	}
 	
 	public ApiResponse deleteMessage(Integer id) {
-		getMessage(id);
+		Message message = getMessage(id);
+		authorizationService.isCorrectUser(message.getUser().getId(), "message");
 		messageRepository.deleteById(id);
 		
 		return ApiResponse.builder()
