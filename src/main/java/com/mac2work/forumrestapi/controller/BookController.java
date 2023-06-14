@@ -49,7 +49,7 @@ public class BookController {
 	}
 	
 	@PostMapping("/{id}")
-	@PreAuthorize("@authorizationService.isAdmin('/books')")
+	@PreAuthorize("@authorizationService.isAdmin('/books', 'POST')")
 	public ResponseEntity<BookResponse> addBook(@RequestBody BookRequest bookRequest){
 		BookResponse bookResponse = bookService.addBook(bookRequest);
 		return new ResponseEntity<>(bookResponse, HttpStatus.CREATED);
@@ -57,14 +57,14 @@ public class BookController {
 	}
 	
 	@PutMapping("/{id}")
-	@PreAuthorize("@authorizationService.isAdmin('/books')")
+	@PreAuthorize("@authorizationService.isAdmin('/books', 'PUT')")
 	public ResponseEntity<BookResponse> updateBook(@RequestBody BookRequest bookRequest, @PathVariable Integer id){
 		BookResponse bookResponse = bookService.updateBook(id, bookRequest);
 		return new ResponseEntity<>(bookResponse, HttpStatus.OK);
 	}
 	
 	@DeleteMapping("/{id}")
-	@PreAuthorize("@authorizationService.isAdmin('books')")
+	@PreAuthorize("@authorizationService.isAdmin('/books', 'DELETE')")
 	public ResponseEntity<ApiResponse> deleteBook(@PathVariable Integer id) {
 		ApiResponse apiResponse = bookService.deleteBook(id);
 		return new ResponseEntity<>(apiResponse, apiResponse.getHttpStatus());
