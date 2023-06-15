@@ -18,6 +18,7 @@ import com.mac2work.forumrestapi.response.ApiResponse;
 import com.mac2work.forumrestapi.response.ThreadResponse;
 import com.mac2work.forumrestapi.service.ThreadService;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
 @RestController
@@ -40,13 +41,13 @@ public class ThreadController {
 	}
 	
 	@PostMapping
-	public ResponseEntity<ThreadResponse> addThread(@RequestBody ThreadRequest threadRequest){
+	public ResponseEntity<ThreadResponse> addThread(@Valid @RequestBody ThreadRequest threadRequest){
 		ThreadResponse threadResponse = threadService.addThread(threadRequest);
 		return new ResponseEntity<>(threadResponse, HttpStatus.CREATED);
 	}
 	
 	@PutMapping("/{id}")
-	public ResponseEntity<ThreadResponse> updateThread(@RequestBody ThreadRequest threadRequest, @PathVariable Integer id){
+	public ResponseEntity<ThreadResponse> updateThread(@Valid @RequestBody ThreadRequest threadRequest, @PathVariable Integer id){
 		ThreadResponse threadResponse = threadService.updateThread(id, threadRequest);
 		return new ResponseEntity<>(threadResponse, HttpStatus.OK);
 	}

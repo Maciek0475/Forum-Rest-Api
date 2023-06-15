@@ -17,6 +17,7 @@ import com.mac2work.forumrestapi.response.ApiResponse;
 import com.mac2work.forumrestapi.response.MessageResponse;
 import com.mac2work.forumrestapi.service.MessageService;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
 @RestController
@@ -32,14 +33,14 @@ public class MessageController {
 	}
 	
 	@PostMapping("threads/{id}/messages")
-	public ResponseEntity<MessageResponse> addThreadMessage(@RequestBody MessageRequest messageRequest, @PathVariable Integer id){
+	public ResponseEntity<MessageResponse> addThreadMessage(@Valid @RequestBody MessageRequest messageRequest, @PathVariable Integer id){
 		MessageResponse messageResponse = messageService.addThreadMessage(messageRequest, id);
 		return new ResponseEntity<>(messageResponse, HttpStatus.CREATED);
 	}
 	
 	
 	@PutMapping("messages/{id}")
-	public ResponseEntity<MessageResponse> updateMessage(@RequestBody MessageRequest messageRequest, @PathVariable Integer id){
+	public ResponseEntity<MessageResponse> updateMessage(@Valid @RequestBody MessageRequest messageRequest, @PathVariable Integer id){
 		MessageResponse messageResponse = messageService.updateMessage(messageRequest, id);
 		return new ResponseEntity<>(messageResponse, HttpStatus.OK);
 	}
