@@ -26,4 +26,10 @@ public class ForumExceptionHandler extends ResponseEntityExceptionHandler{
 		ApiError apiError = new ApiError(HttpStatus.FORBIDDEN, exc.getMessage());
 		return new ResponseEntity<>(apiError, apiError.getHttpStatus());
 	}
+	
+	@ExceptionHandler(UnloggedUserException.class)
+	public ResponseEntity<ApiError> handleUnloggedUser(UnloggedUserException exc){
+		ApiError apiError = new ApiError(HttpStatus.FORBIDDEN, exc.getMessage());
+		return new ResponseEntity<>(apiError, apiError.getHttpStatus());
+	}
 }
