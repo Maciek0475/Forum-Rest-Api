@@ -20,6 +20,7 @@ import com.mac2work.forumrestapi.response.BookResponse;
 import com.mac2work.forumrestapi.response.ThreadResponse;
 import com.mac2work.forumrestapi.service.BookService;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
 @RestController
@@ -50,7 +51,7 @@ public class BookController {
 	
 	@PostMapping("/{id}")
 	@PreAuthorize("@authorizationService.isAdmin('/books', 'POST')")
-	public ResponseEntity<BookResponse> addBook(@RequestBody BookRequest bookRequest){
+	public ResponseEntity<BookResponse> addBook(@Valid @RequestBody BookRequest bookRequest){
 		BookResponse bookResponse = bookService.addBook(bookRequest);
 		return new ResponseEntity<>(bookResponse, HttpStatus.CREATED);
 	
@@ -58,7 +59,7 @@ public class BookController {
 	
 	@PutMapping("/{id}")
 	@PreAuthorize("@authorizationService.isAdmin('/books', 'PUT')")
-	public ResponseEntity<BookResponse> updateBook(@RequestBody BookRequest bookRequest, @PathVariable Integer id){
+	public ResponseEntity<BookResponse> updateBook(@Valid @RequestBody BookRequest bookRequest, @PathVariable Integer id){
 		BookResponse bookResponse = bookService.updateBook(id, bookRequest);
 		return new ResponseEntity<>(bookResponse, HttpStatus.OK);
 	}

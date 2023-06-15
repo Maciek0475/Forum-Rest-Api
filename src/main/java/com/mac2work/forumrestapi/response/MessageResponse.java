@@ -1,14 +1,14 @@
 package com.mac2work.forumrestapi.response;
 
-import com.mac2work.forumrestapi.model.User;
-
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Builder
 @Data
 @AllArgsConstructor
+@NoArgsConstructor
 public class MessageResponse {
 
 	private String threadName;
