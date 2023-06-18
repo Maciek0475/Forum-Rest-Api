@@ -12,4 +12,6 @@ public interface ThreadRepository extends JpaRepository<Thread, Integer>{
 
 	List<Thread> findByBookId(Integer id);
 
+	List<Thread> getAllByBookId(Integer id);
+
 }

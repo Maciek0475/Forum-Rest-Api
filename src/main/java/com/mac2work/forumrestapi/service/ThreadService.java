@@ -49,6 +49,17 @@ public class ThreadService {
 				.content(thread.getContent())
 				.build();
 	}
+	
+	public List<ThreadResponse> getSpecificBookThreads(Integer id) {
+		List<ThreadResponse> threads = threadRepository.getAllByBookId(id).stream()
+				.map(t -> new ThreadResponse(
+						t.getName(),
+						t.getBook(),
+						t.getUser(),
+						t.getContent())).toList();
+		
+		return threads;
+	}
 
 	public ThreadResponse addThread(ThreadRequest threadRequest) {
 		Book book = getBook(threadRequest);
@@ -115,6 +126,8 @@ public class ThreadService {
 				() -> new ResourceNotFoundException("Book", "id", threadRequest.getBookId()));
 		return book;
 	}
+
+	
 	
 
 }
