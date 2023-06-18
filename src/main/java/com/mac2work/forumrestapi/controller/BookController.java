@@ -43,7 +43,7 @@ public class BookController {
 		return new ResponseEntity<>(bookResponse, HttpStatus.OK);
 	}
 	
-	@PostMapping("/{id}")
+	@PostMapping
 	@PreAuthorize("@authorizationService.isAdmin('/books', 'POST')")
 	public ResponseEntity<BookResponse> addBook(@Valid @RequestBody BookRequest bookRequest){
 		BookResponse bookResponse = bookService.addBook(bookRequest);
