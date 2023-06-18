@@ -41,8 +41,8 @@ Check out list of application endpoints.
 
 | Method | Url | Decription | Required privileges | Example of request body | 
 | ------ | --- | ---------- | ------------------- | ----------------------- |
-| POST   | /auth/authorization | Sign up | N/A | [JSON](#) |
-| POST   | /auth/authentication | Sign in | N/A | [JSON](#) |
+| POST   | /auth/authorization | Sign up | N/A | [JSON](#signup) |
+| POST   | /auth/authentication | Sign in | N/A | [JSON](#signin) |
 
 ### Users
 
@@ -50,7 +50,7 @@ Check out list of application endpoints.
 | ------ | --- | ---------- | ------------------- | ----------------------- |
 | GET    | /users | Get all users | ADMIN | N/A |
 | GET    | /users/{id} | Get specific user | ADMIN | N/A |
-| PUT    | /users/{id} | Update specific user | ADMIN | [JSON] (#) |
+| PUT    | /users/{id} | Update specific user | ADMIN | [JSON](#updateuser) |
 | DELETE | /users/{id} | Delete specific user | ADMIN | N/A |
 
 ### Books
@@ -59,8 +59,8 @@ Check out list of application endpoints.
 | ------ | --- | ---------- | ------------------- | ----------------------- |
 | GET    | /books | Get all books | USER | N/A |
 | GET    | /books/{id} | Get specific book | USER | N/A |
-| POST   | /books | Add book | ADMIN | [JSON] (#) |
-| PUT    | /books/{id} | Update specific book | ADMIN | [JSON] (#) |
+| POST   | /books | Add book | ADMIN | [JSON](#createbook) |
+| PUT    | /books/{id} | Update specific book | ADMIN | [JSON](#updatebook) |
 | DELETE | /books/{id} | Delete specific book | ADMIN | N/A |
 
 ### Threads
@@ -70,8 +70,8 @@ Check out list of application endpoints.
 | GET    | /threads | Get all threads | USER | N/A |
 | GET    | /threads/{id} | Get specific thread | USER | N/A |
 | GET    | books/{id}/threads | Get specific book threads | USER | N/A |
-| POST   | /threads | Add thread | USER | [JSON] (#) |
-| PUT    | /threads/{id} | Update specific thread | USER(*) | [JSON] (#) |
+| POST   | /threads | Add thread | USER | [JSON](#createthread) |
+| PUT    | /threads/{id} | Update specific thread | USER(*) | [JSON](#updatethread) |
 | DELETE   | /threads/{id} | Delete specific thread | USER(*) | N/A |
 
 
@@ -80,11 +80,92 @@ Check out list of application endpoints.
 | Method | Url | Decription | Required privileges | Example of request body | 
 | ------ | --- | ---------- | ------------------- | ----------------------- |
 | GET    | /threads/{id}/messages | Get specific thread messages | USER | N/A |
-| POST   | /threads/{id}/messages | Add specific thread message| USER | [JSON] (#) |
-| PUT    | /messages/{id} | Update specific message | USER(*) | [JSON] (#) |
+| POST   | /threads/{id}/messages | Add specific thread message| USER | [JSON](#createmessage) |
+| PUT    | /messages/{id} | Update specific message | USER(*) | [JSON](#updatemessage) |
 | DELETE   | /messages/{id} | Delete specific message | USER(*) | N/A |
 
 *(\*) Required USER who created it or ADMIN*
+
+## Request body examples
+
+#### <a id="signup">Sign Up (/auth/authorization)</a>
+```json
+{
+	"firstName": "Jan",
+	"lastName": "Kowalski",
+	"email": "jan.kowalski@smh.com",
+	"password": "password"
+}
+```
+
+#### <a id="signin">Sign In (/auth/authentication)</a>
+```json
+{
+	"email": "jan.kowalski@smh.com",
+	"password": "password"
+}
+```
+
+#### <a id="updateuser">Update User (/users/{id})</a>
+```json
+{
+	"firstName": "Jan",
+	"lastName": "Kowalski",
+	"email": "jan.kowalski@smh.com",
+	"password": "password"
+}
+```
+
+#### <a id="createbook">Create Book (/books)</a>
+```json
+{
+	"name": "Book",
+	"publicationYear": "2023",
+	"description": "An example of book"
+}
+```
+
+#### <a id="updatebook">Update Book (/books/{id})</a>
+```json
+{
+	"name": "Updated Book",
+	"publicationYear": "2023",
+	"description": "An updated example of book"
+}
+```
+
+#### <a id="createthread">Create Thread (/threads)</a>
+```json
+{
+	"name": "Thread",
+	"bookId": "1",
+	"content": "What do you think about this book?"
+}
+```
+
+#### <a id="updatethread">Update Thread (/threads/{id})</a>
+```json
+{
+	"name": "Updated Thread",
+	"bookId": "1",
+	"content": "What do you think about this book?"
+}
+```
+
+#### <a id="createmessage">Create Message (/threads/{id}/messages)</a>
+```json
+{
+	"content": "I think this book is good."
+}
+```
+
+#### <a id="updatemessage">Update Message (/messages/{id})</a>
+```json
+{
+	"content": "I think this book is great!"
+}
+```
+
 ## Author
 
 * **Maciej Jurczak** 
