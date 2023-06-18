@@ -34,6 +34,43 @@ Also you can run the following command in a terminal window (in the complete dir
 ```
 mvnw spring-boot:run
 ```
+## Rest endpoints
+Check out list of application endpoints.
+
+### Auth
+
+| Method | Url | Decription | Required privileges | Example of request body | 
+| ------ | --- | ---------- | ------------------- | ----------------------- |
+| POST   | /auth/authorization | Sign up | N/A | [JSON](#) |
+| POST   | /auth/authentication | Sign in | N/A | [JSON](#) |
+
+### Users
+
+| Method | Url | Decription | Required privileges | Example of request body | 
+| ------ | --- | ---------- | ------------------- | ----------------------- |
+| GET    | /users | Get all users | ADMIN | N/A |
+| GET    | /users/{id} | Get specific user | ADMIN | N/A |
+| PUT    | /users/{id} | Update specific user | ADMIN | [JSON] (#) |
+| DELETE    | /users/{id} | Delete specific user | ADMIN | N/A |
+
+### Books
+
+| Method | Url | Decription | Required privileges | Example of request body | 
+| ------ | --- | ---------- | ------------------- | ----------------------- |
+| GET    | /books | Get all books | USER | N/A |
+| GET    | /books/ | Get all books | USER | N/A |
+| GET    | /books | Get all books | USER | N/A |
+
+### Threads
+
+| Method | Url | Decription | Required privileges | Example of request body | 
+| ------ | --- | ---------- | ------------------- | ----------------------- |
+
+### Messages
+
+| Method | Url | Decription | Required privileges | Example of request body | 
+| ------ | --- | ---------- | ------------------- | ----------------------- |
+
 
 ## Author
 
