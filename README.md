@@ -51,27 +51,40 @@ Check out list of application endpoints.
 | GET    | /users | Get all users | ADMIN | N/A |
 | GET    | /users/{id} | Get specific user | ADMIN | N/A |
 | PUT    | /users/{id} | Update specific user | ADMIN | [JSON] (#) |
-| DELETE    | /users/{id} | Delete specific user | ADMIN | N/A |
+| DELETE | /users/{id} | Delete specific user | ADMIN | N/A |
 
 ### Books
 
 | Method | Url | Decription | Required privileges | Example of request body | 
 | ------ | --- | ---------- | ------------------- | ----------------------- |
 | GET    | /books | Get all books | USER | N/A |
-| GET    | /books/ | Get all books | USER | N/A |
-| GET    | /books | Get all books | USER | N/A |
+| GET    | /books/{id} | Get specific book | USER | N/A |
+| POST   | /books | Add book | ADMIN | [JSON] (#) |
+| PUT    | /books/{id} | Update specific book | ADMIN | [JSON] (#) |
+| DELETE | /books/{id} | Delete specific book | ADMIN | N/A |
 
 ### Threads
 
 | Method | Url | Decription | Required privileges | Example of request body | 
 | ------ | --- | ---------- | ------------------- | ----------------------- |
+| GET    | /threads | Get all threads | USER | N/A |
+| GET    | /threads/{id} | Get specific thread | USER | N/A |
+| GET    | books/{id}/threads | Get specific book threads | USER | N/A |
+| POST   | /threads | Add thread | USER | [JSON] (#) |
+| PUT    | /threads/{id} | Update specific thread | USER(*) | [JSON] (#) |
+| DELETE   | /threads/{id} | Delete specific thread | USER(*) | N/A |
+
 
 ### Messages
 
 | Method | Url | Decription | Required privileges | Example of request body | 
 | ------ | --- | ---------- | ------------------- | ----------------------- |
+| GET    | /threads/{id}/messages | Get specific thread messages | USER | N/A |
+| POST   | /threads/{id}/messages | Add specific thread message| USER | [JSON] (#) |
+| PUT    | /messages/{id} | Update specific message | USER(*) | [JSON] (#) |
+| DELETE   | /messages/{id} | Delete specific message | USER(*) | N/A |
 
-
+*(\*) Required USER who created it or ADMIN*
 ## Author
 
 * **Maciej Jurczak** 
