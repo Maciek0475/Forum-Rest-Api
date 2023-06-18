@@ -23,36 +23,41 @@ import lombok.RequiredArgsConstructor;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/threads")
 public class ThreadController {
 	private final ThreadService threadService;
 	
-	@GetMapping
+	@GetMapping("/threads")
 	public ResponseEntity<List<ThreadResponse>> getThreads(){
 		List<ThreadResponse> threads = threadService.getThreads();
 		return new ResponseEntity<>(threads, HttpStatus.OK);		
 		
 	}
 	
-	@GetMapping("/{id}")
+	@GetMapping("/threads/{id}")
 	public ResponseEntity<ThreadResponse> getSpecificThread(@PathVariable Integer id){
 		ThreadResponse threadResponse = threadService.getSpecificThread(id);
 		return new ResponseEntity<>(threadResponse, HttpStatus.OK);
 	}
 	
-	@PostMapping
+	@GetMapping("/books/{id}/threads")
+	public ResponseEntity<List<ThreadResponse>> getSpecificBookThreads(@PathVariable Integer id){
+		List<ThreadResponse> threads = threadService.getSpecificBookThreads(id);
+		return new ResponseEntity<>(threads, HttpStatus.OK);
+	}
+	
+	@PostMapping("/threads")
 	public ResponseEntity<ThreadResponse> addThread(@Valid @RequestBody ThreadRequest threadRequest){
 		ThreadResponse threadResponse = threadService.addThread(threadRequest);
 		return new ResponseEntity<>(threadResponse, HttpStatus.CREATED);
 	}
 	
-	@PutMapping("/{id}")
+	@PutMapping("/threads/{id}")
 	public ResponseEntity<ThreadResponse> updateThread(@Valid @RequestBody ThreadRequest threadRequest, @PathVariable Integer id){
 		ThreadResponse threadResponse = threadService.updateThread(id, threadRequest);
 		return new ResponseEntity<>(threadResponse, HttpStatus.OK);
 	}
 	
-	@DeleteMapping("/{id}")
+	@DeleteMapping("/threads/{id}")
 	public ResponseEntity<ApiResponse> deleteThread(@PathVariable Integer id){
 		ApiResponse apiResponse = threadService.deleteThread(id);
 		return new ResponseEntity<>(apiResponse, apiResponse.getHttpStatus());

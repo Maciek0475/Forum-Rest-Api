@@ -11,7 +11,6 @@ import com.mac2work.forumrestapi.repository.BookRepository;
 import com.mac2work.forumrestapi.request.BookRequest;
 import com.mac2work.forumrestapi.response.ApiResponse;
 import com.mac2work.forumrestapi.response.BookResponse;
-import com.mac2work.forumrestapi.response.ThreadResponse;
 
 import lombok.RequiredArgsConstructor;
 
@@ -37,16 +36,6 @@ public class BookService {
 				.description(book.getDescription())
 				.build();
 		}
-
-	public List<ThreadResponse> getSpecificBookThreads(Integer id) {
-		Book book = bookRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Book", "id", id));
-		return book.getThreads().stream().
-				map(thread -> new ThreadResponse(
-						thread.getName(),
-						thread.getBook(),
-						thread.getUser(),
-						thread.getContent())).toList();
-	}
 
 	public BookResponse addBook(BookRequest bookRequest) {
 		Book book = Book.builder()

@@ -43,13 +43,7 @@ public class BookController {
 		return new ResponseEntity<>(bookResponse, HttpStatus.OK);
 	}
 	
-	@GetMapping("/{id}/threads")
-	public ResponseEntity<List<ThreadResponse>> getSpecificBookThreads(@PathVariable Integer id){
-		List<ThreadResponse> threads = bookService.getSpecificBookThreads(id);
-		return new ResponseEntity<>(threads, HttpStatus.OK);
-	}
-	
-	@PostMapping("/{id}")
+	@PostMapping
 	@PreAuthorize("@authorizationService.isAdmin('/books', 'POST')")
 	public ResponseEntity<BookResponse> addBook(@Valid @RequestBody BookRequest bookRequest){
 		BookResponse bookResponse = bookService.addBook(bookRequest);
