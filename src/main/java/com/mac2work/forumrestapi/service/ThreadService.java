@@ -51,7 +51,8 @@ public class ThreadService {
 	}
 	
 	public List<ThreadResponse> getSpecificBookThreads(Integer id) {
-		List<ThreadResponse> threads = threadRepository.getAllByBookId(id).stream()
+		List<ThreadResponse> threads = threadRepository.findAllByBookId(id)
+				.orElseThrow(() -> new ResourceNotFoundException("Threads", "bookId", id)).stream()
 				.map(t -> new ThreadResponse(
 						t.getName(),
 						t.getBook(),

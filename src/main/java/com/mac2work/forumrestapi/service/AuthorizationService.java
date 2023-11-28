@@ -1,7 +1,5 @@
 package com.mac2work.forumrestapi.service;
 
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import com.mac2work.forumrestapi.exception.IncorrectUserException;
@@ -16,15 +14,16 @@ public class AuthorizationService {
 	
 	private final UserService userService;
 	
+	private boolean isAdmin(User user) {
+		boolean isAdmin = user.getRole().toString() == "ADMIN";
+		return isAdmin;
+	}
+	
 	public boolean isAdmin(String path, String mappingMethod) {
 		User user = userService.getLoggedInUser();
 		boolean isAdmin = user.getRole().toString() == "ADMIN";
 		if(!isAdmin)
 			throw new NoAccessException(path, mappingMethod, "ADMIN");
-		return isAdmin;
-	}
-	private boolean isAdmin(User user) {
-		boolean isAdmin = user.getRole().toString() == "ADMIN";
 		return isAdmin;
 	}
 	

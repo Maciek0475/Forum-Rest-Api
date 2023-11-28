@@ -1,10 +1,14 @@
 package com.mac2work.forumrestapi.exception;
 
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
-@Data
+@Getter
+@Setter
 public class NoAccessException extends RuntimeException {
 
+	private static final long serialVersionUID = -3209850499858335595L;
+	
 	private String path;
 	private String mappingMethod;
 	private String requiredRole;

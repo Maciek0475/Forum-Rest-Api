@@ -1,9 +1,14 @@
 package com.mac2work.forumrestapi.exception;
 
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
-@Data
+
+@Getter
+@Setter
 public class IncorrectUserException extends RuntimeException {
+	
+	private static final long serialVersionUID = 4350976516690002972L;
 	
 	private String resource;
 	private String message;
@@ -14,7 +19,7 @@ public class IncorrectUserException extends RuntimeException {
 	}
 	
 	private void formatMessage() {
-		this.message = String.format("You have no rights to modify this %s", resource);
+		message = String.format("You have no rights to modify this %s", resource);
 	}
 
 }
