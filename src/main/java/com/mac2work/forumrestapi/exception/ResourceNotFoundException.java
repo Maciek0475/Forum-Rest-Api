@@ -1,9 +1,13 @@
 package com.mac2work.forumrestapi.exception;
 
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
-@Data
+@Getter
+@Setter
 public class ResourceNotFoundException extends RuntimeException {
+	
+	private static final long serialVersionUID = 4915424559956198957L;
 	
 	private String resourceName; 
 	private String fieldName;

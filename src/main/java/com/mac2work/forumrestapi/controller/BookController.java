@@ -17,7 +17,6 @@ import org.springframework.web.bind.annotation.RestController;
 import com.mac2work.forumrestapi.request.BookRequest;
 import com.mac2work.forumrestapi.response.ApiResponse;
 import com.mac2work.forumrestapi.response.BookResponse;
-import com.mac2work.forumrestapi.response.ThreadResponse;
 import com.mac2work.forumrestapi.service.BookService;
 
 import jakarta.validation.Valid;
