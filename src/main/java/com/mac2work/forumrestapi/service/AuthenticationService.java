@@ -6,6 +6,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.mac2work.forumrestapi.config.JwtService;
+import com.mac2work.forumrestapi.exception.ResourceNotFoundException;
 import com.mac2work.forumrestapi.model.Role;
 import com.mac2work.forumrestapi.model.User;
 import com.mac2work.forumrestapi.repository.UserRepository;
@@ -47,7 +48,7 @@ public class AuthenticationService {
 						)
 				);
 		User user = userRepository.findByEmail(request.getEmail())
-				.orElseThrow();
+				.orElseThrow( () -> new ResourceNotFoundException("User", "email", request.getEmail()));
 		String jwtToken = jwtService.generateToken(user);
 		return AuthenticationResponse.builder()
 				.token(jwtToken)

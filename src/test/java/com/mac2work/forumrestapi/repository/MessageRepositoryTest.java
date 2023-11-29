@@ -39,7 +39,7 @@ class MessageRepositoryTest {
 	private Message message2;
 
 	@BeforeEach
-	public void setUpBeforeClass() {
+	public void setUp() {
 		book = Book.builder()
 				.name("The Hobbit")
 				.publicationYear(1937)
