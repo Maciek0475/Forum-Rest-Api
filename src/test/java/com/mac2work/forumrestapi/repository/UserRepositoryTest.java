@@ -22,7 +22,7 @@ class UserRepositoryTest {
 	private User user;
 	
 	@BeforeEach
-	public void setUpBeforeClass() {
+	public void setUp() throws Exception{
 		user = User.builder()
 				.firstName("Maciej")
 				.lastName("Jurczak")
