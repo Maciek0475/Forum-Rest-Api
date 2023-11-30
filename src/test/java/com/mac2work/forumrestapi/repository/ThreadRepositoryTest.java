@@ -34,7 +34,7 @@ class ThreadRepositoryTest {
 
 
 	@BeforeEach
-	public void setUpBeforeClass() {
+	public void setUp() throws Exception{
 		book = Book.builder()
 				.name("The Hobbit")
 				.publicationYear(1937)

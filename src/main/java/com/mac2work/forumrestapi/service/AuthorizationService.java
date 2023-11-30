@@ -21,7 +21,7 @@ public class AuthorizationService {
 	
 	public boolean isAdmin(String path, String mappingMethod) {
 		User user = userService.getLoggedInUser();
-		boolean isAdmin = user.getRole().toString() == "ADMIN";
+		boolean isAdmin = isAdmin(user);
 		if(!isAdmin)
 			throw new NoAccessException(path, mappingMethod, "ADMIN");
 		return isAdmin;
