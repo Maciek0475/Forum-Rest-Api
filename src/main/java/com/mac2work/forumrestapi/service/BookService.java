@@ -20,21 +20,22 @@ public class BookService {
 	
 	private final BookRepository bookRepository;
 	
-	public List<BookResponse> getBooks() {
-		return bookRepository.findAll().stream()
-				.map(book -> new BookResponse(
-						book.getName(), 
-						book.getPublicationYear(), 
-						book.getDescription())).toList();
-	}
-
-	public BookResponse getSpecificBook(Integer id) {
-		Book book = bookRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Book", "id", id));
+	private BookResponse mapToBookResponse(Book book) {
 		return BookResponse.builder()
 				.name(book.getName())
 				.publication_year(book.getPublicationYear())
 				.description(book.getDescription())
 				.build();
+	}
+	
+	public List<BookResponse> getBooks() {
+		return bookRepository.findAll().stream()
+				.map(book -> mapToBookResponse(book)).toList();
+	}
+
+	public BookResponse getSpecificBook(Integer id) {
+		Book book = bookRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Book", "id", id));
+		return mapToBookResponse(book);
 		}
 
 	public BookResponse addBook(BookRequest bookRequest) {
@@ -45,11 +46,7 @@ public class BookService {
 				.build();
 		bookRepository.save(book);
 		
-		return BookResponse.builder()
-				.name(book.getName())
-				.publication_year(book.getPublicationYear())
-				.description(book.getDescription())
-				.build();
+		return mapToBookResponse(book);
 	}
 
 	public BookResponse updateBook(Integer id, BookRequest bookRequest) {
@@ -58,23 +55,15 @@ public class BookService {
 
 		book.setName(bookRequest.getName());
 		book.setPublicationYear(bookRequest.getPublicationYear());
-		book.setDescription(bookRequest.getDescription());
-
-		System.out.println(book);
-		
+		book.setDescription(bookRequest.getDescription());		
 		bookRepository.save(book);		
-		
-		Book updatedBook = bookRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Book", "id", id));
-		
-		return BookResponse.builder()
-				.name(updatedBook.getName())
-				.publication_year(updatedBook.getPublicationYear())
-				.description(updatedBook.getDescription())
-				.build();
+				
+		return mapToBookResponse(book);
 	}
 
 	public ApiResponse deleteBook(Integer id) {
-		bookRepository.deleteById(id);
+		Book book = bookRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Book", "id", id));
+		bookRepository.delete(book);
 		
 		return ApiResponse.builder()
 				.isSuccess(Boolean.TRUE)
