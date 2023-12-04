@@ -25,13 +25,27 @@ public class MessageService {
 	
 	private final MessageRepository messageRepository;
 	
+	private Message getMessage(Integer id) {
+		Message message = messageRepository.findById(id).orElseThrow(
+				() -> new ResourceNotFoundException("Message", "id", id));
+		return message;
+	}
+	
+	private MessageResponse mapToMessageResponse(User user, Thread thread, String content) {
+		return MessageResponse.builder()
+				.threadName(thread.getName())
+				.userName(user.getFirstName())
+				.content(content)
+				.build();
+	}
+	
 	public List<MessageResponse> getThreadMessages(Integer id) {
 		List<Message> messages = messageRepository.findAllByThreadId(id).orElseThrow(
 				() -> new ResourceNotFoundException("Message", "thread_id", id));
 		return messages.stream().map(
-				message -> new MessageResponse(
-						message.getThread().getName(),
-						message.getUser().getFirstName(),
+				message -> mapToMessageResponse(
+						message.getUser(), 
+						message.getThread(), 
 						message.getContent())).toList();
 	}
 	
@@ -46,11 +60,7 @@ public class MessageService {
 				.content(content)
 				.build());
 		
-		return MessageResponse.builder()
-				.threadName(thread.getName())
-				.userName(loggedInUser.getFirstName())
-				.content(content)
-				.build();
+		return mapToMessageResponse(loggedInUser, thread, content);
 	}
 	
 	public MessageResponse updateMessage(MessageRequest messageRequest, Integer id) {
@@ -63,23 +73,13 @@ public class MessageService {
 		User user = updatedMessage.getUser();
 		String content = updatedMessage.getContent();
 		
-		return MessageResponse.builder()
-				.threadName(thread.getName())
-				.userName(user.getFirstName())
-				.content(content)
-				.build();
-	}
-	
-	private Message getMessage(Integer id) {
-		Message message = messageRepository.findById(id).orElseThrow(
-				() -> new ResourceNotFoundException("Message", "id", id));
-		return message;
+		return mapToMessageResponse(user, thread, content);
 	}
 	
 	public ApiResponse deleteMessage(Integer id) {
 		Message message = getMessage(id);
 		authorizationService.isCorrectUser(message.getUser().getId(), "message");
-		messageRepository.deleteById(id);
+		messageRepository.delete(message);
 		
 		return ApiResponse.builder()
 				.isSuccess(Boolean.TRUE)
