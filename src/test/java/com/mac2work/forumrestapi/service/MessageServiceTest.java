@@ -124,7 +124,7 @@ class MessageServiceTest {
 	}
 	
 	@Test
-	final void messageService_updateMessagee_ThrowResourceNotFoundException() {
+	final void messageService_updateMessage_ThrowResourceNotFoundException() {
 		int id = 3;
 		Message emptyMessage = null;
 		when(messageRepository.findById(id)).thenReturn(Optional.ofNullable(emptyMessage));
@@ -137,7 +137,7 @@ class MessageServiceTest {
 	}
 
 	@Test
-	final void messageService_deleteMessagee_ReturnApiResponseNotNull() {
+	final void messageService_deleteMessage_ReturnApiResponseNotNull() {
 		when(authorizationService.isCorrectUser(user.getId(), "message")).thenReturn(true);
 		doNothing().when(messageRepository).delete(Mockito.any(Message.class));
 		when(messageRepository.findById(message.getId())).thenReturn(Optional.of(message));
