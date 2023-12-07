@@ -51,7 +51,7 @@ public class ThreadService {
 				.build();
 	}
 	
-	private Thread mapToThreadResponse(ThreadRequest threadRequest, Book book, User user) {
+	private Thread mapToThread(ThreadRequest threadRequest, Book book, User user) {
 		return Thread.builder()
 				.name(threadRequest.getName())
 				.book(book)
@@ -86,16 +86,11 @@ public class ThreadService {
 		Book book = getBook(threadRequest);
 		User user = userService.getLoggedInUser();
 		
-		Thread thread = mapToThreadResponse(threadRequest, book, user);
+		Thread thread = mapToThread(threadRequest, book, user);
 		
 		threadRepository.save(thread);
 		
-		return ThreadResponse.builder()
-				.name(threadRequest.getName())
-				.book(book)
-				.user(user)
-				.content(threadRequest.getContent())
-				.build();
+		return mapToThreadResponse(thread);
 	}
 
 	public ThreadResponse updateThread(Integer id, ThreadRequest threadRequest) {
