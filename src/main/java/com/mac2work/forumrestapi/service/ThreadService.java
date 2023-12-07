@@ -27,21 +27,13 @@ public class ThreadService {
 	private final UserService userService;
 	private final AuthorizationService authorizationService;
 	
-	public List<ThreadResponse> getThreads() {
-		List<Thread> threads = threadRepository.findAll();
-		
-		return threads.stream().map(
-				thread -> new ThreadResponse(
-						thread.getName(), 
-						thread.getBook(), 
-						thread.getUser(), 
-						thread.getContent())).toList();
-		
+	private Book getBook(ThreadRequest threadRequest) {
+		Book book = bookRepository.findById(threadRequest.getBookId()).orElseThrow(
+				() -> new ResourceNotFoundException("Book", "id", threadRequest.getBookId()));
+		return book;
 	}
-
-	public ThreadResponse getSpecificThread(Integer id) {
-		Thread thread = getThread(id);
-		
+	
+	private ThreadResponse mapToThreadResponse(Thread thread) {
 		return ThreadResponse.builder()
 				.name(thread.getName())
 				.book(thread.getBook())
@@ -50,14 +42,42 @@ public class ThreadService {
 				.build();
 	}
 	
+	private ThreadResponse mapToThreadResponse(ThreadRequest threadRequest, Thread thread, Book book) {
+		return ThreadResponse.builder()
+				.name(threadRequest.getName())
+				.book(book)
+				.user(thread.getUser())
+				.content(threadRequest.getContent())
+				.build();
+	}
+	
+	private Thread mapToThread(ThreadRequest threadRequest, Book book, User user) {
+		return Thread.builder()
+				.name(threadRequest.getName())
+				.book(book)
+				.user(user)
+				.content(threadRequest.getContent())
+				.build();
+	}
+	
+	public List<ThreadResponse> getThreads() {
+		List<Thread> threads = threadRepository.findAll();
+		
+		return threads.stream().map(
+				thread -> mapToThreadResponse(thread)).toList();
+		
+	}
+
+	public ThreadResponse getSpecificThread(Integer id) {
+		Thread thread = getThread(id);
+		
+		return mapToThreadResponse(thread);
+	}
+	
 	public List<ThreadResponse> getSpecificBookThreads(Integer id) {
 		List<ThreadResponse> threads = threadRepository.findAllByBookId(id)
 				.orElseThrow(() -> new ResourceNotFoundException("Threads", "bookId", id)).stream()
-				.map(t -> new ThreadResponse(
-						t.getName(),
-						t.getBook(),
-						t.getUser(),
-						t.getContent())).toList();
+				.map(thread -> mapToThreadResponse(thread)).toList();
 		
 		return threads;
 	}
@@ -66,25 +86,12 @@ public class ThreadService {
 		Book book = getBook(threadRequest);
 		User user = userService.getLoggedInUser();
 		
-		Thread thread = Thread.builder()
-				.name(threadRequest.getName())
-				.book(book)
-				.user(user)
-				.content(threadRequest.getContent())
-				.build();
+		Thread thread = mapToThread(threadRequest, book, user);
 		
 		threadRepository.save(thread);
 		
-		return ThreadResponse.builder()
-				.name(threadRequest.getName())
-				.book(book)
-				.user(user)
-				.content(threadRequest.getContent())
-				.build();
+		return mapToThreadResponse(thread);
 	}
-
-
-	
 
 	public ThreadResponse updateThread(Integer id, ThreadRequest threadRequest) {
 		Thread thread = getThread(id);
@@ -96,12 +103,7 @@ public class ThreadService {
 		thread.setContent(threadRequest.getContent());
 		
 		threadRepository.save(thread);
-		return ThreadResponse.builder()
-				.name(threadRequest.getName())
-				.book(book)
-				.user(thread.getUser())
-				.content(threadRequest.getContent())
-				.build();
+		return mapToThreadResponse(threadRequest, thread, book);
 	}
 	
 	public ApiResponse deleteThread(Integer id) {
@@ -121,14 +123,6 @@ public class ThreadService {
 		Thread thread = threadRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Thread", "id", id));
 		return thread;
 	}
-	
-	private Book getBook(ThreadRequest threadRequest) {
-		Book book = bookRepository.findById(threadRequest.getBookId()).orElseThrow(
-				() -> new ResourceNotFoundException("Book", "id", threadRequest.getBookId()));
-		return book;
-	}
-
-	
 	
 
 }
