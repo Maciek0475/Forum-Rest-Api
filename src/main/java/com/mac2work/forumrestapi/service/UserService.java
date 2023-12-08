@@ -20,6 +20,10 @@ import lombok.RequiredArgsConstructor;
 public class UserService {
 
 	private final UserRepository userRepository;
+	
+	private User getUser(Integer id) {
+		return userRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("User", "id", id));
+	}
 
 	public User getLoggedInUser() {
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
@@ -48,10 +52,6 @@ public class UserService {
 				.email(user.getEmail())
 				.role(user.getRole())
 				.build();
-	}
-
-	private User getUser(Integer id) {
-		return userRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("User", "id", id));
 	}
 
 	public UserResponse updateUser(Integer id, UserRequest userRequest) {
