@@ -18,7 +18,6 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mac2work.forumrestapi.request.AuthenticationRequest;
 import com.mac2work.forumrestapi.request.RegisterRequest;
@@ -62,7 +61,7 @@ class AuthenticationControllerTest {
 	}
 
 	@Test
-	final void testRegister() throws Exception {
+	final void AuthenticationController_register_ReturnAuthenticationResponse() throws Exception {
 		when(authenticationService.register(registerRequest)).thenReturn(authenticationResponse);
 		
 		ResultActions response = mockMvc.perform(post("/auth/register")
@@ -75,7 +74,7 @@ class AuthenticationControllerTest {
 	}
 
 	@Test
-	final void testAuthenticate() throws Exception {
+	final void AuthenticationController_authenticate_ReturnAuthenticationResponse() throws Exception {
 		when(authenticationService.authenticate(authenticationRequest)).thenReturn(authenticationResponse);
 		
 		ResultActions response = mockMvc.perform(post("/auth/authenticate")

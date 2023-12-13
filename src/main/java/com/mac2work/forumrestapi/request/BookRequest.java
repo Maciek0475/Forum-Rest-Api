@@ -15,7 +15,6 @@ public class BookRequest {
 
 	@NotBlank
 	private String name;
-	@Size(min=4, max=4)
 	private Integer publicationYear;
 	@NotBlank
 	@Size(max = 512)
