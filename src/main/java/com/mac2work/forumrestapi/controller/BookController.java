@@ -38,7 +38,6 @@ public class BookController {
 	@GetMapping("/{id}")
 	public ResponseEntity<BookResponse> getSpecificBook(@PathVariable Integer id){
 		BookResponse bookResponse = bookService.getSpecificBook(id);
-		
 		return new ResponseEntity<>(bookResponse, HttpStatus.OK);
 	}
 	
