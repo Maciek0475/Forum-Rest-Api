@@ -89,7 +89,7 @@ class BookControllerTest {
 	}
 
 	@Test
-	final void BookController_getSpecificBook_ReturnBookResponse() throws Exception {
+	final void bookController_getSpecificBook_ReturnBookResponse() throws Exception {
 		int id = 1;
 		when(bookService.getSpecificBook(id)).thenReturn(bookResponse);
 		
@@ -103,7 +103,7 @@ class BookControllerTest {
 	}
 
 	@Test
-	final void BookController_addBook_ReturnBookResponse() throws Exception {
+	final void bookController_addBook_ReturnBookResponse() throws Exception {
 		when(bookService.addBook(bookRequest)).thenReturn(bookResponse);
 		
 		ResultActions response = mockMvc.perform(post("/books")
@@ -117,7 +117,7 @@ class BookControllerTest {
 	}
 
 	@Test
-	final void testUpdateBook_ReturnBookResponse() throws Exception {
+	final void bookController_testUpdateBook_ReturnBookResponse() throws Exception {
 		int id = 1;
 		when(bookService.updateBook(id, bookRequest)).thenReturn(bookResponse);
 		
@@ -132,7 +132,7 @@ class BookControllerTest {
 		}
 
 	@Test
-	final void BookController_deleteBook_ReturnApiResponse() throws Exception {
+	final void bookController_deleteBook_ReturnApiResponse() throws Exception {
 		int id = 1;
 		when(bookService.deleteBook(id)).thenReturn(apiResponse);
 		
