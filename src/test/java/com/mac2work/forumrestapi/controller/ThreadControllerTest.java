@@ -98,7 +98,7 @@ class ThreadControllerTest {
 	}
 
 	@Test
-	final void threadController_testGetThreads_ReturnListOfThreadResponses() throws Exception {
+	final void threadController_getThreads_ReturnListOfThreadResponses() throws Exception {
 		List<ThreadResponse> threadResponses = List.of(threadResponse, threadResponse2);
 		when(threadService.getThreads()).thenReturn(threadResponses);
 		
@@ -110,7 +110,7 @@ class ThreadControllerTest {
 	}
 
 	@Test
-	final void threadController_testGetSpecificThread_ReturnThreadResponse() throws Exception {
+	final void threadController_getSpecificThread_ReturnThreadResponse() throws Exception {
 		when(threadService.getSpecificThread(id)).thenReturn(threadResponse);
 		
 		ResultActions response = mockMvc.perform(get("/threads/"+id)
@@ -138,7 +138,7 @@ class ThreadControllerTest {
 	}
 
 	@Test
-	final void threadController_testAddThread_ReturnThreadResponse() throws Exception {
+	final void threadController_addThread_ReturnThreadResponse() throws Exception {
 		when(threadService.addThread(threadRequest)).thenReturn(threadResponse);
 
 		ResultActions response = mockMvc.perform(post("/threads")
@@ -155,7 +155,7 @@ class ThreadControllerTest {
 	}
 
 	@Test
-	final void threadController_testUpdateThread_ReturnThreadResponse() throws Exception {
+	final void threadController_updateThread_ReturnThreadResponse() throws Exception {
 		when(threadService.updateThread(id, threadRequest)).thenReturn(threadResponse);
 		
 		ResultActions response = mockMvc.perform(put("/threads/"+id)
@@ -172,7 +172,7 @@ class ThreadControllerTest {
 	}
 
 	@Test
-	final void threadController_testDeleteThread_ReturnApiResponse() throws Exception {
+	final void threadController_deleteThread_ReturnApiResponse() throws Exception {
 		when(threadService.deleteThread(id)).thenReturn(apiResponse);
 		
 		ResultActions response = mockMvc.perform(delete("/threads/"+id)
