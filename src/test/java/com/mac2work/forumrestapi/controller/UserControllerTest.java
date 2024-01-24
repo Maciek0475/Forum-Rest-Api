@@ -83,7 +83,7 @@ class UserControllerTest {
 	}
 
 	@Test
-	final void testGetUsers() throws Exception {
+	final void UserController_testGetUsers_ReturnListOfUserResponses() throws Exception {
 		List<UserResponse> userResponses = List.of(userResponse, userResponse2);
 		when(userService.getUsers()).thenReturn(userResponses);
 		
@@ -95,7 +95,7 @@ class UserControllerTest {
 	}
 
 	@Test
-	final void testGetSpecificUser() throws Exception {
+	final void UserController_testGetSpecificUser_ReturnUserResponse() throws Exception {
 		when(userService.getSpecificUser(id)).thenReturn(userResponse);
 		
 		ResultActions response = mockMvc.perform(get("/users/"+id)
@@ -109,7 +109,7 @@ class UserControllerTest {
 	}
 
 	@Test
-	final void testUpdateUser() throws Exception {
+	final void UserController_testUpdateUser_ReturnUserResponse() throws Exception {
 		when(userService.updateUser(id, userRequest)).thenReturn(userResponse);
 		
 		ResultActions response = mockMvc.perform(put("/users/"+id)
@@ -124,7 +124,7 @@ class UserControllerTest {
 	}
 
 	@Test
-	final void testDeleteUser() throws Exception {
+	final void UserController_testDeleteUser_ReturnApiResponse() throws Exception {
 		when(userService.deleteUser(id)).thenReturn(apiResponse);
 		
 		ResultActions response = mockMvc.perform(delete("/users/"+id)
