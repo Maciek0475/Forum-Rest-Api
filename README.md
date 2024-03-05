@@ -12,6 +12,7 @@ Mostly used:
 * [Spring Boot](https://spring.io/)
 * [Mysql](https://www.mysql.com/)
 * [JWT](https://jwt.io/)
+* [Docker](https://www.docker.com/)
 
 The project is an example of using several technologies, mainly including:
 * Spring Security
@@ -19,20 +20,26 @@ The project is an example of using several technologies, mainly including:
 * REST
 * JWT
 * Mysql
-
-### Preparing Database
-
-You have to create database and import `rest-api.sql`. In `application.properties`
-you can manipulate connection data as you like.
+* Docker
 
 ### Running Localy
 
-You can run Forum-Rest-Api from your IDE. All you have to do after import this project is execute `ForumRestApiApplication.java` in package `com.mac2work.forumrestapi`.
+If you want to easily run this application, you must first have docker on your machine.
 
-Also you can run the following command in a terminal window (in the complete directory):
+#### Start Application
 
+Only one command is required to start Yacht-Charter-Api:
+
+```console
+docker compose up
 ```
-mvnw spring-boot:run
+
+#### Stop Application
+
+If you want to stop application you should use command below:
+
+```console
+docker compose down
 ```
 ## Rest endpoints
 Check out list of application endpoints.
@@ -41,8 +48,8 @@ Check out list of application endpoints.
 
 | Method | Url | Decription | Required privileges | Example of request body | 
 | ------ | --- | ---------- | ------------------- | ----------------------- |
-| POST   | /auth/authorization | Sign up | N/A | [JSON](#signup) |
-| POST   | /auth/authentication | Sign in | N/A | [JSON](#signin) |
+| POST   | /auth/register | Sign up | N/A | [JSON](#signup) |
+| POST   | /auth/authenticate | Sign in | N/A | [JSON](#signin) |
 
 ### Users
 
@@ -69,7 +76,7 @@ Check out list of application endpoints.
 | ------ | --- | ---------- | ------------------- | ----------------------- |
 | GET    | /threads | Get all threads | USER | N/A |
 | GET    | /threads/{id} | Get specific thread | USER | N/A |
-| GET    | books/{id}/threads | Get specific book threads | USER | N/A |
+| GET    | /books/{id}/threads | Get specific book threads | USER | N/A |
 | POST   | /threads | Add thread | USER | [JSON](#createthread) |
 | PUT    | /threads/{id} | Update specific thread | USER(*) | [JSON](#updatethread) |
 | DELETE   | /threads/{id} | Delete specific thread | USER(*) | N/A |
@@ -88,7 +95,7 @@ Check out list of application endpoints.
 
 ## Request body examples
 
-#### <a id="signup">Sign Up (/auth/authorization)</a>
+#### <a id="signup">Sign Up (/auth/register)</a>
 ```json
 {
 	"firstName": "Jan",
@@ -98,7 +105,7 @@ Check out list of application endpoints.
 }
 ```
 
-#### <a id="signin">Sign In (/auth/authentication)</a>
+#### <a id="signin">Sign In (/auth/authenticate)</a>
 ```json
 {
 	"email": "jan.kowalski@smh.com",
