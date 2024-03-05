@@ -2,6 +2,7 @@ package com.mac2work.forumrestapi.service;
 
 import java.util.List;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
@@ -34,11 +35,7 @@ public class UserService {
 		List<User> users = userRepository.findAll();
 		
 		List<UserResponse> usersResponses = users.stream().map(
-				user -> new UserResponse(
-						user.getFirstName(),
-						user.getLastName(),
-						user.getEmail(),
-						user.getRole())).toList();
+				user -> mapToUserResponse(user)).toList();
 		
 		return usersResponses;
 	}
@@ -46,12 +43,7 @@ public class UserService {
 	public UserResponse getSpecificUser(Integer id) {
 		User user = getUser(id);
 		
-		return UserResponse.builder()
-				.firstName(user.getFirstName())
-				.lastName(user.getLastName())
-				.email(user.getEmail())
-				.role(user.getRole())
-				.build();
+		return mapToUserResponse(user);
 	}
 
 	public UserResponse updateUser(Integer id, UserRequest userRequest) {
@@ -65,12 +57,7 @@ public class UserService {
 		userRepository.save(user);
 		User updatedUser = getUser(id);
 		
-		return UserResponse.builder()
-				.firstName(updatedUser.getFirstName())
-				.lastName(updatedUser.getLastName())
-				.email(updatedUser.getEmail())
-				.role(updatedUser.getRole())
-				.build();
+		return mapToUserResponse(updatedUser);
 	}
 
 	public ApiResponse deleteUser(Integer id) {
@@ -80,6 +67,16 @@ public class UserService {
 		return ApiResponse.builder()
 				.isSuccess(Boolean.TRUE)
 				.responseMessage("User deleted successfully")
+				.httpStatus(HttpStatus.OK)
+				.build();
+	}
+	
+	public UserResponse mapToUserResponse(User user) {
+		return UserResponse.builder()
+				.firstName(user.getFirstName())
+				.lastName(user.getLastName())
+				.email(user.getEmail())
+				.role(user.getRole())
 				.build();
 	}
 

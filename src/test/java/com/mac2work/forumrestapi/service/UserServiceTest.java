@@ -15,6 +15,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.http.HttpStatus;
 
 import com.mac2work.forumrestapi.exception.ResourceNotFoundException;
 import com.mac2work.forumrestapi.model.Role;
@@ -36,6 +37,8 @@ class UserServiceTest {
 	private User user;
 	private User user2;
 	private UserRequest userRequest;
+	private UserResponse userResponse;
+	private ApiResponse apiResponse;
 
 	@BeforeEach
 	void setUp() throws Exception {
@@ -62,6 +65,17 @@ class UserServiceTest {
 				.password("Password123")
 				.role(Role.ADMIN)
 				.build();
+		userResponse = UserResponse.builder()
+				.firstName("Maciej")
+				.lastName("Jurczak")
+				.email("mac2work@o2.pl")
+				.role(Role.ADMIN)
+				.build();
+		apiResponse = ApiResponse.builder()
+				.isSuccess(Boolean.TRUE)
+				.responseMessage("User deleted successfully")
+				.httpStatus(HttpStatus.OK)
+				.build();
 	}
 
 	@Test
@@ -81,7 +95,7 @@ class UserServiceTest {
 		
 		UserResponse userResponse = userService.getSpecificUser(user.getId());
 		
-		assertThat(userResponse).isNotNull();
+		assertThat(userResponse).isEqualTo(this.userResponse);
 	}
 
 	@Test
@@ -99,23 +113,23 @@ class UserServiceTest {
 	}
 	
 	@Test
-	final void userService_updateUser_ReturnUserResponseNotNull() {
-		when(userRepository.findById(user.getId())).thenReturn(Optional.of(user));
-		doReturn(null).when(userRepository).save(user);
+	final void userService_updateUser_ReturnUserResponse() {
+		when(userRepository.findById(user2.getId())).thenReturn(Optional.of(user2));
+		doReturn(null).when(userRepository).save(user2);
 		
-		UserResponse userResponse = userService.updateUser(user.getId(), userRequest);
+		UserResponse userResponse = userService.updateUser(user2.getId(), userRequest);
 		
-		assertThat(userResponse).isNotNull();
+		assertThat(userResponse).isEqualTo(this.userResponse);
 	}
 
 	@Test
-	final void userService_deleteUser_ReturnApiResponseNotNull() {
+	final void userService_deleteUser_ReturnApiResponse() {
 		when(userRepository.findById(user.getId())).thenReturn(Optional.of(user));
 		doNothing().when(userRepository).delete(user);
 		
 		ApiResponse apiResponse = userService.deleteUser(user.getId());
 		
-		assertThat(apiResponse).isNotNull();
+		assertThat(apiResponse).isEqualTo(this.apiResponse);
 	}
 
 }

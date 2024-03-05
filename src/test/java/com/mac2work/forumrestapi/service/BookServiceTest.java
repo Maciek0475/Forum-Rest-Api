@@ -16,6 +16,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.http.HttpStatus;
 
 import com.mac2work.forumrestapi.exception.ResourceNotFoundException;
 import com.mac2work.forumrestapi.model.Book;
@@ -35,7 +36,9 @@ class BookServiceTest {
 	
 	private Book book;
 	private Book book2;
+	private BookResponse bookResponse;
 	private BookRequest bookRequest;
+	private ApiResponse apiResponse;
 
 	
 	@BeforeEach
@@ -52,10 +55,20 @@ class BookServiceTest {
 				.publicationYear(1954)
 				.description("One of the world’s most famous books that continues the tale of the ring Bilbo found in The Hobbit and what comes next for it, him, and his nephew Frodo.")
 				.build();
+		bookResponse = BookResponse.builder()
+				.name("The Hobbit")
+				.publication_year(1937)
+				.description("The bedtime story for his children famously begun on the blank page of an exam script that tells the tale of Bilbo Baggins and the dwarves in their quest to take back the Lonely Mountain from Smaug the dragon")
+				.build();
 		bookRequest = BookRequest.builder()
-				.name("The Hobbit: There and Back Again")
+				.name("The Hobbit")
 				.publicationYear(1937)
 				.description("The bedtime story for his children famously begun on the blank page of an exam script that tells the tale of Bilbo Baggins and the dwarves in their quest to take back the Lonely Mountain from Smaug the dragon")
+				.build();
+		apiResponse = ApiResponse.builder()
+				.isSuccess(Boolean.TRUE)
+				.responseMessage("Book deleted successfully")
+				.httpStatus(HttpStatus.OK)
 				.build();
 	}
 
@@ -71,13 +84,13 @@ class BookServiceTest {
 	}
 
 	@Test
-	final void bookService_getSpecificBook_ReturnBookResponseNotNull() {
+	final void bookService_getSpecificBook_ReturnBookResponse() {
 		int id = book.getId();
 		when(bookRepository.findById(id)).thenReturn(Optional.of(book));
 		
 		BookResponse bookResponse = bookService.getSpecificBook(id);
 		
-		assertThat(bookResponse).isNotNull();
+		assertThat(bookResponse).isEqualTo(this.bookResponse);
 	}
 	
 	@Test
@@ -94,35 +107,34 @@ class BookServiceTest {
 	}
 
 	@Test
-	final void bookService_addBook_ReturnBookResponseNotNull() {
+	final void bookService_addBook_ReturnBookResponse() {
 		doReturn(null).when(bookRepository).save(Mockito.any(Book.class));
 		
 		BookResponse bookResponse = bookService.addBook(bookRequest);
 		
-		assertThat(bookResponse).isNotNull();
+		assertThat(bookResponse).isEqualTo(this.bookResponse);
 	}
 
 	@Test
-	final void bookService_updateBook_ReturnBookResponseEqualToBookRequest() {
-		int id = book.getId();				
+	final void bookService_updateBook_ReturnBookResponse() {
+		int id = book2.getId();				
 		doReturn(null).when(bookRepository).save(Mockito.any(Book.class));
-		when(bookRepository.findById(id)).thenReturn(Optional.of(book));
+		when(bookRepository.findById(id)).thenReturn(Optional.of(book2));
 		
 		BookResponse bookResponse = bookService.updateBook(id, bookRequest);
 		
-		assertThat(bookResponse).isNotNull();
-		assertThat(bookResponse.getName()).isEqualTo(bookRequest.getName());
+		assertThat(bookResponse).isEqualTo(this.bookResponse);
 	}
 
 	@Test
-	final void bookService_deleteBook_ReturnApiResponseNotNull() {
+	final void bookService_deleteBook_ReturnApiResponse() {
 		int id = book.getId();
 		when(bookRepository.findById(id)).thenReturn(Optional.of(book));
 		doNothing().when(bookRepository).delete(Mockito.any(Book.class));
 		
 		ApiResponse apiResponse = bookService.deleteBook(id);
 		
-		assertThat(apiResponse).isNotNull();
+		assertThat(apiResponse).isEqualTo(this.apiResponse);
 	}
 
 }

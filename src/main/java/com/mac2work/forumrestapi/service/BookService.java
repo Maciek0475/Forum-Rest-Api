@@ -20,7 +20,7 @@ public class BookService {
 	
 	private final BookRepository bookRepository;
 	
-	private BookResponse mapToBookResponse(Book book) {
+	public BookResponse mapToBookResponse(Book book) {
 		return BookResponse.builder()
 				.name(book.getName())
 				.publication_year(book.getPublicationYear())
@@ -68,7 +68,7 @@ public class BookService {
 		return ApiResponse.builder()
 				.isSuccess(Boolean.TRUE)
 				.responseMessage("Book deleted successfully")
-				.httpStatus(HttpStatus.NO_CONTENT)
+				.httpStatus(HttpStatus.OK)
 				.build();
 				
 	}

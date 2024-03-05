@@ -26,12 +26,12 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.mac2work.forumrestapi.model.Book;
 import com.mac2work.forumrestapi.model.Role;
-import com.mac2work.forumrestapi.model.User;
 import com.mac2work.forumrestapi.request.ThreadRequest;
 import com.mac2work.forumrestapi.response.ApiResponse;
+import com.mac2work.forumrestapi.response.BookResponse;
 import com.mac2work.forumrestapi.response.ThreadResponse;
+import com.mac2work.forumrestapi.response.UserResponse;
 import com.mac2work.forumrestapi.service.ThreadService;
 
 @ExtendWith(MockitoExtension.class)
@@ -47,8 +47,8 @@ class ThreadControllerTest {
 	@MockBean
 	private ThreadService threadService;
 	
-	private Book book;
-	private User user;
+	private BookResponse bookResponse;
+	private UserResponse userResponse;
 	private ThreadResponse threadResponse;
 	private ThreadResponse threadResponse2;
 	private ThreadRequest threadRequest;
@@ -59,41 +59,38 @@ class ThreadControllerTest {
 	void setUp() throws Exception {
 		id = 1;
 		
-		book = Book.builder()
-				.id(1)
+		bookResponse = BookResponse.builder()
 				.name("The Hobbit")
-				.publicationYear(1937)
+				.publication_year(1937)
 				.description("The bedtime story for his children famously begun on the blank page of an exam script that tells the tale of Bilbo Baggins and the dwarves in their quest to take back the Lonely Mountain from Smaug the dragon")
 				.build();
-		user = User.builder()
-				.id(1)
+		userResponse = UserResponse.builder()
 				.firstName("Maciej")
 				.lastName("Jurczak")
 				.email("mac2work@o2.pl")
-				.password("Password123")
 				.role(Role.ADMIN)
 				.build();		
 		threadRequest = ThreadRequest.builder()
 				.name("Bilbo entering the lonely mountain")
-				.bookId(book.getId())
+				.bookId(1)
 				.content("What Bilbo find upon when he entered Erebor")
 				.build();
 		threadResponse = ThreadResponse.builder()
 				.name("Bilbo returning to the Shire")
-				.book(book)
-				.user(user)
+				.book(bookResponse)
+				.user(userResponse)
 				.content("What Bilbo find upon when he returned to the Shire")
 				.build();
 		threadResponse2 = ThreadResponse.builder()
 				.name("Bilbo entering the lonely mountain")
-				.book(book)
-				.user(user)
+				.book(bookResponse)
+				.user(userResponse)
 				.content("What Bilbo find upon when he entered Erebor")
 				.build();
 		apiResponse = ApiResponse.builder()
 				.isSuccess(Boolean.TRUE)
 				.responseMessage("Thread deleted successfully")
-				.httpStatus(HttpStatus.NO_CONTENT)
+				.httpStatus(HttpStatus.OK)
 				.build();
 	}
 
@@ -178,7 +175,7 @@ class ThreadControllerTest {
 		ResultActions response = mockMvc.perform(delete("/threads/"+id)
 				.contentType(MediaType.APPLICATION_JSON));
 		
-		response.andExpect(status().isNoContent())
+		response.andExpect(status().isOk())
 		.andExpect(jsonPath("$.isSuccess", CoreMatchers.is(apiResponse.getIsSuccess())))
 		.andExpect(jsonPath("$.responseMessage", CoreMatchers.is(apiResponse.getResponseMessage())))
 		.andExpect(jsonPath("$.httpStatus", CoreMatchers.is(apiResponse.getHttpStatus().name())));

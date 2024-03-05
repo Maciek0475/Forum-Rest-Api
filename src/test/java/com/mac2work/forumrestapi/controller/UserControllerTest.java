@@ -78,7 +78,7 @@ class UserControllerTest {
 		apiResponse = ApiResponse.builder()
 				.isSuccess(Boolean.TRUE)
 				.responseMessage("User deleted successfully")
-				.httpStatus(HttpStatus.NO_CONTENT)
+				.httpStatus(HttpStatus.OK)
 				.build();
 	}
 
@@ -130,7 +130,7 @@ class UserControllerTest {
 		ResultActions response = mockMvc.perform(delete("/users/"+id)
 				.contentType(MediaType.APPLICATION_JSON));
 		
-		response.andExpect(status().isNoContent())
+		response.andExpect(status().isOk())
 				.andExpect(jsonPath("$.isSuccess", CoreMatchers.is(apiResponse.getIsSuccess())))
 				.andExpect(jsonPath("$.responseMessage", CoreMatchers.is(apiResponse.getResponseMessage())))
 				.andExpect(jsonPath("$.httpStatus", CoreMatchers.is(apiResponse.getHttpStatus().name())));

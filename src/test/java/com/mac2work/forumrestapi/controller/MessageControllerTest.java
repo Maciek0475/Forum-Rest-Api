@@ -67,8 +67,8 @@ class MessageControllerTest {
 				.build();
 		apiResponse = ApiResponse.builder()
 				.isSuccess(Boolean.TRUE)
-				.responseMessage("Message with id: "+id+" deleted successfully")
-				.httpStatus(HttpStatus.NO_CONTENT)
+				.responseMessage("Message deleted successfully")
+				.httpStatus(HttpStatus.OK)
 				.build();
 		id = 1;
 		
@@ -117,7 +117,7 @@ class MessageControllerTest {
 		ResultActions response = mockMvc.perform(delete("/messages/"+id)
 				.contentType(MediaType.APPLICATION_JSON));
 		
-		response.andExpect(status().isNoContent())
+		response.andExpect(status().isOk())
 				.andExpect(jsonPath("$.isSuccess", CoreMatchers.is(apiResponse.getIsSuccess())))
 				.andExpect(jsonPath("$.responseMessage", CoreMatchers.is(apiResponse.getResponseMessage())))
 				.andExpect(jsonPath("$.httpStatus", CoreMatchers.is(apiResponse.getHttpStatus().name())));

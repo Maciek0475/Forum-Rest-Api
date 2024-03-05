@@ -1,0 +1,33 @@
+version: '3.7'
+
+services:
+  forum:
+    image: mac2work/forum-rest-api:0.0.1-SNAPSHOT
+    mem_limit: 700m
+    restart: on-failure
+    ports:
+      - "8080:8080"
+    networks:
+      - forum-network
+    depends_on:
+      - forumdb
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://forumdb:3306/forum-api
+      SPRING_JPA_HIBERNATE_DDL_AUTO: update
+  forumdb:
+    container_name: forumdb
+    image: mysql
+    restart: on-failure
+    ports:
+      - "3307:3306"
+    networks:
+      - forum-network
+    environment:
+      - MYSQL_DATABASE=forum-api
+      - MYSQL_USER=mac2work
+      - MYSQL_PASSWORD=mac2work
+      - MYSQL_ROOT_PASSWORD=mac2work
+    volumes:
+      - ./mysql-data:/var/lib/mysql/
+networks:
+  forum-network:

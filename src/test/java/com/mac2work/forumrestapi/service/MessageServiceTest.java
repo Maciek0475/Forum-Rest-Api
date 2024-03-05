@@ -16,6 +16,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.http.HttpStatus;
 
 import com.mac2work.forumrestapi.exception.ResourceNotFoundException;
 import com.mac2work.forumrestapi.model.Book;
@@ -49,6 +50,8 @@ class MessageServiceTest {
 	private Message message;
 	private Message message2;
 	private MessageRequest messageRequest;
+	private MessageResponse messageResponse;
+	private ApiResponse apiResponse;
 
 	@BeforeEach
 	void setUp() throws Exception {
@@ -87,6 +90,16 @@ class MessageServiceTest {
 		messageRequest = MessageRequest.builder()
 				.content("Bilbo receives a nasty suprise. He has been presumed dead, and the contents of his hill are being auctioned off")
 				.build();
+		messageResponse = MessageResponse.builder()
+				.threadName("Bilbo returning to the Shire")
+				.userName("Maciej")
+				.content("Bilbo receives a nasty suprise. He has been presumed dead, and the contents of his hill are being auctioned off")
+				.build();
+		apiResponse = ApiResponse.builder()
+				.isSuccess(Boolean.TRUE)
+				.responseMessage("Message deleted successfully")
+				.httpStatus(HttpStatus.OK)
+				.build();
 	}
 
 	@Test
@@ -102,25 +115,25 @@ class MessageServiceTest {
 	}
 
 	@Test
-	final void messageService_addThreadMessage_ReturnMessageResponseNotNull() {
+	final void messageService_addThreadMessage_ReturnMessageResponse() {
 		when(userService.getLoggedInUser()).thenReturn(user);
 		when(threadService.getThread(thread.getId())).thenReturn(thread);
 		doReturn(null).when(messageRepository).save(Mockito.any(Message.class));
 		
 		MessageResponse messageResponse = messageService.addThreadMessage(messageRequest, thread.getId());
 		
-		assertThat(messageResponse).isNotNull();
+		assertThat(messageResponse).isEqualTo(this.messageResponse);
 	}
 
 	@Test
-	final void messageService_updateMessage_ReturnMessageResponseNotNull() {
+	final void messageService_updateMessage_ReturnMessageResponse() {
 		when(authorizationService.isCorrectUser(user.getId(), "message")).thenReturn(true);
 		doReturn(null).when(messageRepository).save(Mockito.any(Message.class));
-		when(messageRepository.findById(message.getId())).thenReturn(Optional.of(message));
+		when(messageRepository.findById(message2.getId())).thenReturn(Optional.of(message));
 
-		MessageResponse messageResponse = messageService.updateMessage(messageRequest, message.getId());
+		MessageResponse messageResponse = messageService.updateMessage(messageRequest, message2.getId());
 		
-		assertThat(messageResponse).isNotNull();
+		assertThat(messageResponse).isEqualTo(this.messageResponse);
 	}
 	
 	@Test
@@ -137,14 +150,14 @@ class MessageServiceTest {
 	}
 
 	@Test
-	final void messageService_deleteMessage_ReturnApiResponseNotNull() {
+	final void messageService_deleteMessage_ReturnApiResponse() {
 		when(authorizationService.isCorrectUser(user.getId(), "message")).thenReturn(true);
 		doNothing().when(messageRepository).delete(Mockito.any(Message.class));
 		when(messageRepository.findById(message.getId())).thenReturn(Optional.of(message));
 
 		ApiResponse apiResponse = messageService.deleteMessage(message.getId());
 		
-		assertThat(apiResponse).isNotNull();
+		assertThat(apiResponse).isEqualTo(this.apiResponse);
 	}
 
 }

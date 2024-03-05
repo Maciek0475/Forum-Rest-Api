@@ -16,6 +16,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.http.HttpStatus;
 
 import com.mac2work.forumrestapi.exception.ResourceNotFoundException;
 import com.mac2work.forumrestapi.model.Book;
@@ -26,7 +27,9 @@ import com.mac2work.forumrestapi.repository.BookRepository;
 import com.mac2work.forumrestapi.repository.ThreadRepository;
 import com.mac2work.forumrestapi.request.ThreadRequest;
 import com.mac2work.forumrestapi.response.ApiResponse;
+import com.mac2work.forumrestapi.response.BookResponse;
 import com.mac2work.forumrestapi.response.ThreadResponse;
+import com.mac2work.forumrestapi.response.UserResponse;
 
 @ExtendWith(MockitoExtension.class)
 class ThreadServiceTest {
@@ -39,15 +42,21 @@ class ThreadServiceTest {
 	private UserService userService;
 	@Mock
 	private AuthorizationService authorizationService;
+	@Mock
+	private BookService bookService;
 	
 	@InjectMocks
 	private ThreadService threadService;
 	
 	private Book book;
 	private User user;
+	private BookResponse bookResponse;
+	private UserResponse userResponse;
 	private Thread thread;
 	private Thread thread2;
 	private ThreadRequest threadRequest;
+	private ThreadResponse threadResponse;
+	private ApiResponse apiResponse;
 
 	@BeforeEach
 	void setUp() throws Exception {
@@ -65,6 +74,17 @@ class ThreadServiceTest {
 				.password("Password123")
 				.role(Role.ADMIN)
 				.build();		
+		bookResponse = BookResponse.builder()
+				.name("The Hobbit")
+				.publication_year(1937)
+				.description("The bedtime story for his children famously begun on the blank page of an exam script that tells the tale of Bilbo Baggins and the dwarves in their quest to take back the Lonely Mountain from Smaug the dragon")
+				.build();
+		userResponse = UserResponse.builder()
+				.firstName("Maciej")
+				.lastName("Jurczak")
+				.email("mac2work@o2.pl")
+				.role(Role.ADMIN)
+				.build();	
 		thread = Thread.builder()
 				.id(1)
 				.name("Bilbo returning to the Shire")
@@ -80,9 +100,20 @@ class ThreadServiceTest {
 				.content("What Bilbo find upon when he entered Erebor")
 				.build();
 		threadRequest = ThreadRequest.builder()
-				.name("Bilbo entering the lonely mountain")
+				.name("Bilbo returning to the Shire")
 				.bookId(book.getId())
-				.content("What Bilbo find upon when he entered Erebor")
+				.content("What Bilbo find upon when he returned to the Shire")
+				.build();
+		threadResponse = ThreadResponse.builder()
+				.name("Bilbo returning to the Shire")
+				.book(bookResponse)
+				.user(userResponse)
+				.content("What Bilbo find upon when he returned to the Shire")
+				.build();
+		apiResponse = ApiResponse.builder()
+				.isSuccess(Boolean.TRUE)
+				.responseMessage("Thread deleted successfully")
+				.httpStatus(HttpStatus.OK)
 				.build();
 	}
 
@@ -90,6 +121,7 @@ class ThreadServiceTest {
 	final void threadService_getThreads_ReturnMoreThanOneThreadResponse() {
 		List<Thread> threads = List.of(thread, thread2);
 		when(threadRepository.findAll()).thenReturn(threads);
+		when(bookService.mapToBookResponse(Mockito.any(Book.class))).thenReturn(bookResponse);
 		
 		List<ThreadResponse> threadResponses = threadService.getThreads();
 		
@@ -98,19 +130,22 @@ class ThreadServiceTest {
 	}
 
 	@Test
-	final void threadService_getSpecificThread_ReturnThreadResponseNotNull() {
+	final void threadService_getSpecificThread_ReturnThreadResponse() {
 		ThreadService threadServiceSpy = Mockito.spy(threadService);
 		doReturn(thread).when(threadServiceSpy).getThread(thread.getId());
+		when(bookService.mapToBookResponse(Mockito.any(Book.class))).thenReturn(bookResponse);
+		when(userService.mapToUserResponse(Mockito.any(User.class))).thenReturn(userResponse);
 		
 		ThreadResponse threadResponse = threadServiceSpy.getSpecificThread(thread.getId());
 		
-		assertThat(threadResponse).isNotNull();
+		assertThat(threadResponse).isEqualTo(this.threadResponse);
 	}
 
 	@Test
 	final void threadService_getSpecificBookThreads_ReturnMoreThanOneThreadResponse() {
 		List<Thread> threads = List.of(thread, thread2);
 		when(threadRepository.findAllByBookId(book.getId())).thenReturn(Optional.of(threads));
+		when(bookService.mapToBookResponse(Mockito.any(Book.class))).thenReturn(bookResponse);
 		
 		List<ThreadResponse> threadResponses = threadService.getSpecificBookThreads(book.getId());
 		
@@ -131,32 +166,38 @@ class ThreadServiceTest {
 	}
 
 	@Test
-	final void threadService_addThread_ReturnThreadResponseNotNull() {
+	final void threadService_addThread_ReturnThreadResponse() {
 		when(bookRepository.findById(threadRequest.getBookId())).thenReturn(Optional.of(book));
 		when(userService.getLoggedInUser()).thenReturn(user);
 		doReturn(null).when(threadRepository).save(Mockito.any(Thread.class));
+		when(bookService.mapToBookResponse(Mockito.any(Book.class))).thenReturn(bookResponse);
+		when(userService.mapToUserResponse(Mockito.any(User.class))).thenReturn(userResponse);
+
+
 		
 		ThreadResponse threadResponse = threadService.addThread(threadRequest);
 		
-		assertThat(threadResponse).isNotNull();
+		assertThat(threadResponse).isEqualTo(this.threadResponse);
 	}
 
 	@Test
-	final void threadService_updateThread_ReturnThreadResponseNotNull() {
-		int id = 1;
+	final void threadService_updateThread_ReturnThreadResponse() {
+		int id = 2;
 		ThreadService threadServiceSpy = Mockito.spy(threadService);
-		doReturn(thread).when(threadServiceSpy).getThread(thread.getId());
+		doReturn(thread2).when(threadServiceSpy).getThread(thread2.getId());
 		when(bookRepository.findById(threadRequest.getBookId())).thenReturn(Optional.of(book));
 		when(authorizationService.isCorrectUser(user.getId(), "thread")).thenReturn(true);
-		doReturn(null).when(threadRepository).save(Mockito.any(Thread.class));
-		
+		doReturn(thread).when(threadRepository).save(Mockito.any(Thread.class));
+		when(bookService.mapToBookResponse(Mockito.any(Book.class))).thenReturn(bookResponse);
+		when(userService.mapToUserResponse(Mockito.any(User.class))).thenReturn(userResponse);
+
 		ThreadResponse threadResponse = threadServiceSpy.updateThread(id, threadRequest);
 
-		assertThat(threadResponse).isNotNull();
+		assertThat(threadResponse).isEqualTo(this.threadResponse);
 	}
 
 	@Test
-	final void threadService_deleteThread_ReturnApiResponseNotNull() {
+	final void threadService_deleteThread_ReturnApiResponse() {
 		ThreadService threadServiceSpy = Mockito.spy(threadService);
 		doReturn(thread).when(threadServiceSpy).getThread(thread.getId());
 		when(authorizationService.isCorrectUser(user.getId(), "thread")).thenReturn(true);
@@ -164,7 +205,7 @@ class ThreadServiceTest {
 		
 		ApiResponse apiResponse = threadServiceSpy.deleteThread(thread.getId());
 		
-		assertThat(apiResponse).isNotNull();
+		assertThat(apiResponse).isEqualTo(this.apiResponse);
 		
 	}
 
