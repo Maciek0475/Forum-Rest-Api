@@ -26,6 +26,7 @@ public class ThreadService {
 	
 	private final UserService userService;
 	private final AuthorizationService authorizationService;
+	private final BookService bookService;
 	
 	private Book getBook(ThreadRequest threadRequest) {
 		Book book = bookRepository.findById(threadRequest.getBookId()).orElseThrow(
@@ -36,18 +37,9 @@ public class ThreadService {
 	private ThreadResponse mapToThreadResponse(Thread thread) {
 		return ThreadResponse.builder()
 				.name(thread.getName())
-				.book(thread.getBook())
-				.user(thread.getUser())
+				.book(bookService.mapToBookResponse(thread.getBook()))
+				.user(userService.mapToUserResponse(thread.getUser()))
 				.content(thread.getContent())
-				.build();
-	}
-	
-	private ThreadResponse mapToThreadResponse(ThreadRequest threadRequest, Thread thread, Book book) {
-		return ThreadResponse.builder()
-				.name(threadRequest.getName())
-				.book(book)
-				.user(thread.getUser())
-				.content(threadRequest.getContent())
 				.build();
 	}
 	
@@ -102,8 +94,8 @@ public class ThreadService {
 		thread.setBook(book);
 		thread.setContent(threadRequest.getContent());
 		
-		threadRepository.save(thread);
-		return mapToThreadResponse(threadRequest, thread, book);
+		thread = threadRepository.save(thread);
+		return mapToThreadResponse(thread);
 	}
 	
 	public ApiResponse deleteThread(Integer id) {
@@ -115,7 +107,7 @@ public class ThreadService {
 		return ApiResponse.builder()
 				.isSuccess(Boolean.TRUE)
 				.responseMessage("Thread deleted successfully")
-				.httpStatus(HttpStatus.NO_CONTENT)
+				.httpStatus(HttpStatus.OK)
 				.build();
 	}
 

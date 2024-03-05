@@ -83,8 +83,8 @@ public class MessageService {
 		
 		return ApiResponse.builder()
 				.isSuccess(Boolean.TRUE)
-				.responseMessage("Message with id: "+id+" deleted successfully")
-				.httpStatus(HttpStatus.NO_CONTENT)
+				.responseMessage("Message deleted successfully")
+				.httpStatus(HttpStatus.OK)
 				.build();
 	}
 
